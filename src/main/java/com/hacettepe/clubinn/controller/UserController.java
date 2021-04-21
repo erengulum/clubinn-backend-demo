@@ -62,6 +62,8 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+
+
     @RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
     public ResponseEntity<ProfileDto> getProfile(@PathVariable String username){
         log.warn("get profile(User icin) metodu basariyla calisti");

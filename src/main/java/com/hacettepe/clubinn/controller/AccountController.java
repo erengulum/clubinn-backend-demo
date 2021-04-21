@@ -54,7 +54,7 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.POST) //LoginRequest'i DTO kısmında olusturduk.Front-end'den gelen login objesi gibi düsün
     @ResponseBody
-    public ResponseEntity<TokenResponse> login(@Validated @RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) throws AuthenticationException {
+    public ResponseEntity<TokenResponse> login(@Validated @RequestBody LoginRequest loginRequest) throws AuthenticationException {
         log.warn("login'e girdi");
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -65,15 +65,8 @@ public class AccountController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
 
-        // Add a session cookie
-        Cookie sessionCookie = new Cookie( "someSessionId", token );
-        // httpsler icin bu degisecek deploy sonrasi
-        sessionCookie.setSecure(request.isSecure());
-        response.addCookie( sessionCookie );
-
 
         User userFromDB = userRepository.findByUsername(loginRequest.getUsername().toLowerCase());
-
 
         //Burada sorun olabilir:Bunu yaz:         return ResponseEntity.ok(new AuthToken(token));
         return ResponseEntity.ok(new TokenResponse(userFromDB.getUsername(),userFromDB.getFirstName(), userFromDB.getSurname(), userFromDB.getRole().getName(),token));
@@ -84,6 +77,9 @@ public class AccountController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value="Register Operation",response = Boolean.class)
     public ResponseEntity<ResponseMessage> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
+
+        System.out.println("kayda geldi" + registrationRequest.getEmail());
+
 
         responseMessage.setResponseMessage(registrationHelper.registrationValidator(registrationRequest));
 

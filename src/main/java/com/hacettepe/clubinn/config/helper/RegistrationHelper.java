@@ -15,7 +15,7 @@ public class RegistrationHelper {
     public String registrationValidator(RegistrationRequest registrationRequest){
 
         if(userService.isUsernameExists(registrationRequest.getUsername())){
-            return "Kullanıcı adı/Kimlik Numarası zaten kullanılmakta.";
+            return "Kullanıcı adı zaten kullanılmakta.";
         }
 
         if(userService.isEmailExists(registrationRequest.getEmail())){
