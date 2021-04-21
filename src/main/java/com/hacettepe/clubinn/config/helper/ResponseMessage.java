@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ResponseMessage {
 
-    private int responseType; // 1=> No Problem.Registration is done 0=>There is a problem but it's not user's fault
+    private int responseType; // 1=> No Problem.Operation is done ;     0=>There is a problem but it's not user's fault
     private String responseMessage;
 
 }

@@ -27,7 +27,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -105,14 +104,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             Profile currentProfile = profileRepository.findByUserUsername(username);
             log.warn("profile repostory basaili bir sekilde cekildi:",currentProfile.getUser());
             currentProfile.setAbout(profileDto.getAbout());
-        log.warn("set-1 ", profileDto.getAbout());
 
         currentProfile.setCity(profileDto.getCity());
-        log.warn("set ortalandı");
+
 
         currentProfile.setPhone(profileDto.getPhone());
             currentProfile.setHobbies(profileDto.getHobbies());
-        log.warn("save basladi");
 
         profileRepository.save(currentProfile);
         log.warn("save bitti");
