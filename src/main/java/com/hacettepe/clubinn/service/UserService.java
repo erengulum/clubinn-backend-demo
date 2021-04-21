@@ -1,5 +1,6 @@
 package com.hacettepe.clubinn.service;
 
+import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
 import com.hacettepe.clubinn.model.dto.ProfileDto;
 import com.hacettepe.clubinn.model.dto.RegistrationRequest;
 import com.hacettepe.clubinn.model.dto.UserDto;
@@ -24,9 +25,11 @@ public interface UserService {
 
     Boolean register(RegistrationRequest registrationRequest);
 
-    String updateProfile(ProfileDto profile,String username);
+    String updateProfile(ProfileDto profile, String username);
+
     ProfileDto getProfile(String username);
+
     void createProfile(User user);
 
-
+    String changePassword(PasswordChangeDto passwordChangeDto, String username);
 }
