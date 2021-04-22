@@ -1,9 +1,6 @@
 package com.hacettepe.clubinn.service;
 
-import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
-import com.hacettepe.clubinn.model.dto.ProfileDto;
-import com.hacettepe.clubinn.model.dto.RegistrationRequest;
-import com.hacettepe.clubinn.model.dto.UserDto;
+import com.hacettepe.clubinn.model.dto.*;
 import com.hacettepe.clubinn.model.entity.User;
 
 import java.util.List;
@@ -32,4 +29,9 @@ public interface UserService {
     void createProfile(User user);
 
     String changePassword(PasswordChangeDto passwordChangeDto, String username);
+
+    String updateProfileWithEmail(UpdateProfileDto updateProfileDto , String username);
+
+    String emailCheck(String email);
+
 }

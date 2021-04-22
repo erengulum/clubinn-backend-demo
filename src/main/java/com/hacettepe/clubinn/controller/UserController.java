@@ -2,6 +2,7 @@ package com.hacettepe.clubinn.controller;
 
 import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
 import com.hacettepe.clubinn.model.dto.ProfileDto;
+import com.hacettepe.clubinn.model.dto.UpdateProfileDto;
 import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.config.helper.ResponseMessage;
 import com.hacettepe.clubinn.service.UserService;
@@ -77,6 +78,11 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+    @RequestMapping(value = "/profile/email/{username}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseMessage> updateEmail(@RequestBody UpdateProfileDto updateProfileDto, @PathVariable String username) {
+        responseMessage.setResponseMessage(userService.updateProfileWithEmail(updateProfileDto, username));
+        return ResponseEntity.ok(responseMessage);
+    }
 
 
 
