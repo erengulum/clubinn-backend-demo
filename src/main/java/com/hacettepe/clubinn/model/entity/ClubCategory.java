@@ -19,7 +19,7 @@ public class ClubCategory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "imageurl", length = 100, unique = true)
+    @Column(name = "imageurl", length = 200)
     private String imageurl;
 
 

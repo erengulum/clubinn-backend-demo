@@ -3,16 +3,11 @@ package com.hacettepe.clubinn.controller;
 
 import com.hacettepe.clubinn.config.helper.ResponseMessage;
 import com.hacettepe.clubinn.model.dto.ClubCategoryDto;
-import com.hacettepe.clubinn.model.dto.RegistrationRequest;
-import com.hacettepe.clubinn.model.entity.ClubCategory;
+import com.hacettepe.clubinn.model.dto.ClubCategoryRequestDto;
 import com.hacettepe.clubinn.service.ClubCategoryService;
-import com.hacettepe.clubinn.service.UserService;
 import com.hacettepe.clubinn.util.ApiPaths;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,22 +42,13 @@ public class ClubCategoryController {
     }
 
 
-
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> createNewClub(@Validated @RequestBody ClubCategoryDto clubCategoryDto) {
 
-        Boolean response = clubCategoryService.createNewSubClub(clubCategoryDto);
+        String response = clubCategoryService.createNewClub(clubCategoryDto);
+        responseMessage.setResponseMessage(response);
 
-        if(!response){
-            responseMessage.setResponseMessage("Yeni kulüp kategorisi oluşturulurken bir hata meydana geldi.Lütfen tekrar deneyiniz");
-            return ResponseEntity.badRequest().body(responseMessage);
-        }
-
-        else{
-            responseMessage.setResponseMessage("Yeni Kulüp Kategorisi başarıyla oluşturuldu!");
-            return ResponseEntity.ok(responseMessage);
-        }
+        return ResponseEntity.ok(responseMessage);
 
 
     }
@@ -88,13 +74,57 @@ public class ClubCategoryController {
 
 
 
+    @RequestMapping(value = "/request/create", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> createNewRequest(@Validated @RequestBody ClubCategoryRequestDto clubCategoryRequestDto) {
+
+        String response = clubCategoryService.requestClubCategory(clubCategoryRequestDto);
+        responseMessage.setResponseMessage(response);
+        return ResponseEntity.ok(responseMessage);
+
+    }
+
+    @RequestMapping(value = "/request/all",method = RequestMethod.GET)
+    public ResponseEntity<List<ClubCategoryRequestDto>> getAllRequests(){
+        List<ClubCategoryRequestDto> data = clubCategoryService.getAllRequests();
+        return ResponseEntity.ok(data);
+    }
+
+
+    @RequestMapping(value = "/request/delete/{requestId}", method = RequestMethod.DELETE)
+    public ResponseEntity<ResponseMessage> deleteClubCategoryRequest(@PathVariable Long requestId) {
+        log.warn("Request silme islemi backende geldi");
+        Boolean response = clubCategoryService.deleteClubRequest(requestId);
+
+        if(!response){
+            responseMessage.setResponseMessage("There is a problem during deletion process. Please try again");
+            return ResponseEntity.badRequest().body(responseMessage);
+        }
+
+        else{
+            responseMessage.setResponseMessage("Request is successfully deleted");
+            return ResponseEntity.ok(responseMessage);
+        }
+
+    }
+
+    @RequestMapping(value = "/request/vote/{id}",method = RequestMethod.GET)
+    public ResponseEntity<Boolean> voteForRequest(@PathVariable Long id){
+        log.warn("oylama controller");
+        Boolean response = clubCategoryService.voteForRequest(id);
+        return ResponseEntity.ok(response);
+    }
 
 
 
+    @RequestMapping(value = "/request/create/club", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> convertRequestToClub(@Validated @RequestBody ClubCategoryRequestDto clubCategoryRequestDto) {
+        log.warn("convert controller");
+        String response = clubCategoryService.convertRequestToClub(clubCategoryRequestDto);
+        responseMessage.setResponseMessage(response);
+        log.warn(" controller cikiss");
+        return ResponseEntity.ok(responseMessage);
 
-
-
-
+    }
 
 
 
