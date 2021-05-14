@@ -1,5 +1,6 @@
 package com.hacettepe.clubinn.controller;
 
+import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
 import com.hacettepe.clubinn.model.dto.ProfileDto;
 import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.config.helper.ResponseMessage;
@@ -62,11 +63,20 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+
+
     @RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
     public ResponseEntity<ProfileDto> getProfile(@PathVariable String username){
         log.warn("get profile(User icin) metodu basariyla calisti");
         return ResponseEntity.ok(userService.getProfile(username));
     }
+
+    @RequestMapping(value = "/profile/changepassword/{username}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseMessage> changePassword(@RequestBody PasswordChangeDto passwordChangeDto, @PathVariable String username) {
+        responseMessage.setResponseMessage(userService.changePassword(passwordChangeDto, username));
+        return ResponseEntity.ok(responseMessage);
+    }
+
 
 
 
