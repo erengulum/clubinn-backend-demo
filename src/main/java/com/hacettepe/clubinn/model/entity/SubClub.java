@@ -23,7 +23,7 @@ public class SubClub {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "imageurl", length = 100, unique = true)
+    @Column(name = "imageurl", length = 100)
     private String imageurl;
 
     @Column(name = "subClubName", length = 100, unique = true)
