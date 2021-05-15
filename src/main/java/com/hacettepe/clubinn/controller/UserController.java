@@ -2,6 +2,7 @@ package com.hacettepe.clubinn.controller;
 
 import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
 import com.hacettepe.clubinn.model.dto.ProfileDto;
+import com.hacettepe.clubinn.model.dto.UpdateProfileDto;
 import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.config.helper.ResponseMessage;
 import com.hacettepe.clubinn.service.UserService;
@@ -12,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @Slf4j
 @CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
@@ -28,15 +28,11 @@ public class UserController {
         this.responseMessage = responseMessage;
     }
 
-
-
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getOne(@PathVariable String username){
         log.warn("GetOne(User icin) metodu basariyla calisti");
         return ResponseEntity.ok(userService.getByUsername(username));
     }
-
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
@@ -63,8 +59,6 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-
-
     @RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
     public ResponseEntity<ProfileDto> getProfile(@PathVariable String username){
         log.warn("get profile(User icin) metodu basariyla calisti");
@@ -77,8 +71,11 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-
-
+    @RequestMapping(value = "/profile/email/{username}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseMessage> updateEmail(@RequestBody UpdateProfileDto updateProfileDto, @PathVariable String username) {
+        responseMessage.setResponseMessage(userService.updateProfileWithEmail(updateProfileDto, username));
+        return ResponseEntity.ok(responseMessage);
+    }
 
 
 }
