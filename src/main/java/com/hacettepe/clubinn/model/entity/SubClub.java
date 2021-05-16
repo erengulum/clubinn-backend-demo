@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -23,7 +25,7 @@ public class SubClub {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "imageurl", length = 100)
+    @Column(name = "imageurl", length = 100, unique = true)
     private String imageurl;
 
     @Column(name = "subClubName", length = 100, unique = true)
@@ -40,8 +42,9 @@ public class SubClub {
             @JoinColumn(name = "CLUBCATEGORY_ID") })
     private ClubCategory clubCategory;
 
-
-
-
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "chat_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Chat chat;
 
 }
