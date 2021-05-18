@@ -43,9 +43,14 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     private Profile profile;
 
-    @ManyToOne
-    @JoinColumn(name = "chat_id")
-    private Chat chat;
+
+    @ManyToMany(mappedBy = "userList")
+    private Collection<Chat> chat;
+
+
+    @ManyToMany(mappedBy = "members")
+    private Collection<SubClub> subclubs;
+
 
     @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Collection<Message> Message;
