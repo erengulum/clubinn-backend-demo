@@ -18,6 +18,14 @@ INSERT INTO subclubs(subclub_id, imageurl, description, sub_club_name)  VALUES (
 INSERT INTO subclubs(subclub_id, imageurl, description, sub_club_name)  VALUES (6,'assets/img/compvision.png','Description for Computer Vision Subclub','Computer Vision Subclub');
 
 
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(1,'chat-desc-1',1);
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(2,'chat-desc-2',2);
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(3,'chat-desc-3',3);
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(4,'chat-desc-4',4);
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(5,'chat-desc-5',5);
+INSERT INTO chat(chat_id, chat_description, subclub_id) VALUES(6,'chat-desc-6',6);
+
+
 INSERT INTO subclub_category(clubcategory_id, subclud_id) VALUES (4,1);
 INSERT INTO subclub_category(clubcategory_id, subclud_id) VALUES (4,2);
 INSERT INTO subclub_category(clubcategory_id, subclud_id) VALUES (4,3);

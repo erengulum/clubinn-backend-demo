@@ -60,4 +60,9 @@ public class SubClub {
     @OneToMany(mappedBy = "subClub", cascade = CascadeType.ALL)
     private Collection<Announcement> announcements;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "admin_id")
+    private User admin;
+
 }

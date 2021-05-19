@@ -55,6 +55,10 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Collection<Message> Message;
 
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Collection<SubClub> administrations;
+
     public User(Long id){
         this.id = id;
     }

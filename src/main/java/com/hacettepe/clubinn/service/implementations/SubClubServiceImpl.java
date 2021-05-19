@@ -166,7 +166,34 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
+    @Override
+    public Boolean assignAdmin(Long subclubId, Long userId) {
+        User user = userRepository.getOne(userId);
+        if(user==null)
+            return Boolean.FALSE;
 
+        SubClub subclub = subClubRepository.getOne(subclubId);
+        if (subclub==null)
+            return Boolean.FALSE;
+
+        subclub.setAdmin(user);
+        subClubRepository.save(subclub);
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public UserDto getSubclubAdmin(Long subclubId) {
+        SubClub subclub = subClubRepository.getOne(subclubId);
+        if (subclub==null)
+            return null;
+
+        if( subclub.getAdmin()==null)
+            return null;
+
+        User user = subclub.getAdmin();
+
+        return modelMapper.map(user, UserDto.class);
+    }
 
 
     @Override

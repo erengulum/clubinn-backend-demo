@@ -28,6 +28,9 @@ public interface SubClubService {
 
     List<UserDto> getAllSubclubMembers(Long subclubId);
 
+    Boolean assignAdmin(Long subclubId,Long userId);
+    UserDto getSubclubAdmin(Long subclubId);
+
 
     Boolean createNewAnnouncement(AnnouncementDto announcementDto,Long subclubId);
     Boolean deleteSubClubAnnouncement(Long annoncementId);

@@ -21,4 +21,6 @@ public class SubClubDto {
 
     private ClubCategoryDto clubCategory;
 
+
+
 }

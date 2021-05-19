@@ -189,6 +189,39 @@ public class SubClubController {
     }
 
 
+    //Administration
+    @RequestMapping(value = "/{subclubId}/admin/{userId}", method=RequestMethod.GET)
+    public ResponseEntity<ResponseMessage> assignAdmin(@PathVariable("subclubId") Long subclubId, @PathVariable("userId") Long userId) {
+        Boolean response = subClubService.assignAdmin(subclubId,userId);
+
+        if(response){
+            responseMessage.setResponseMessage("Admin atama işlemi basariyla tamamlanmıştır");
+            return ResponseEntity.ok(responseMessage);
+        }
+        else{
+            responseMessage.setResponseMessage("Admin atama işlemi sırasında bir hata meydana geldi");
+            return ResponseEntity.badRequest().body(responseMessage);
+        }
+
+
+    }
+
+    //Get Admin of the subclub
+    @RequestMapping(value = "/getadmin/{subclubId}", method=RequestMethod.GET)
+    public ResponseEntity<UserDto> getAdmin(@PathVariable Long subclubId) {
+        UserDto response = subClubService.getSubclubAdmin(subclubId);
+
+        if(response !=null){
+            return ResponseEntity.ok(response);
+        }
+        else{
+            return ResponseEntity.badRequest().body(response);
+        }
+
+    }
+
+
+
 
 
 }
