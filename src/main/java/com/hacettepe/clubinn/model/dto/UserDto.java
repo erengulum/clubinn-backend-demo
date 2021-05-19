@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "Data Transfer Object for User")
 public class UserDto {
 
+    private String username;
+
     private Long id;
 
     private String firstName;

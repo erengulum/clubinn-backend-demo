@@ -1,9 +1,6 @@
 package com.hacettepe.clubinn.service.implementations;
 
-import com.hacettepe.clubinn.model.dto.PasswordChangeDto;
-import com.hacettepe.clubinn.model.dto.ProfileDto;
-import com.hacettepe.clubinn.model.dto.RegistrationRequest;
-import com.hacettepe.clubinn.model.dto.UserDto;
+import com.hacettepe.clubinn.model.dto.*;
 import com.hacettepe.clubinn.model.entity.Profile;
 import com.hacettepe.clubinn.model.entity.Role;
 import com.hacettepe.clubinn.model.entity.User;
@@ -17,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username.toLowerCase());
-        if(user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("Invalid username");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
@@ -61,14 +60,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
-
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         Role role = user.getRole();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         return authorities;
     }
-
 
 
     @Override
@@ -78,14 +75,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
-
     public List<UserDto> getAll() {
         List<User> data = userRepository.findAll();
         return Arrays.asList(modelMapper.map(data, UserDto[].class));
     }
 
 
-    public void createProfile(User user){
+    public void createProfile(User user) {
         Profile profile = new Profile();
         profile.setUser(user);
         profileRepository.save(profile);
@@ -93,24 +89,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public ProfileDto getProfile(String username) {
-        Profile profile= profileRepository.findByUserUsername(username);
+        Profile profile = profileRepository.findByUserUsername(username);
         return modelMapper.map(profile, ProfileDto.class);
     }
 
 
     @Override
-    public String updateProfile(ProfileDto profileDto,String username){
-        log.warn("updateprofile service func calisiyor:",profileDto.getHobbies());
+    public String updateProfile(ProfileDto profileDto, String username) {
+        log.warn("updateprofile service func calisiyor:", profileDto.getHobbies());
 
-            Profile currentProfile = profileRepository.findByUserUsername(username);
-            log.warn("profile repostory basaili bir sekilde cekildi:",currentProfile.getUser());
-            currentProfile.setAbout(profileDto.getAbout());
+        Profile currentProfile = profileRepository.findByUserUsername(username);
+        log.warn("profile repostory basaili bir sekilde cekildi:", currentProfile.getUser());
+        currentProfile.setAbout(profileDto.getAbout());
 
         currentProfile.setCity(profileDto.getCity());
 
 
         currentProfile.setPhone(profileDto.getPhone());
-            currentProfile.setHobbies(profileDto.getHobbies());
+        currentProfile.setHobbies(profileDto.getHobbies());
 
         profileRepository.save(currentProfile);
         log.warn("save bitti");
@@ -121,7 +117,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean isUsernameExists(String username) {
-        if(userRepository.findByUsername(username.toLowerCase())==null){
+        if (userRepository.findByUsername(username.toLowerCase()) == null) {
             return false;
         }
         return true;
@@ -130,7 +126,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean isEmailExists(String email) {
-        if(userRepository.findByEmail(email.toLowerCase())==null){
+        if (userRepository.findByEmail(email.toLowerCase()) == null) {
             return false;
         }
         return true;
@@ -139,19 +135,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean deleteUser(Long id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
 
     }
-
-
-
-
 
 
     @Transactional
@@ -274,4 +265,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return "true";
     }
 
+    @Override
+    public String updateProfileWithEmail(UpdateProfileDto updateProfileDto, String username) {
+
+        User currentUser = userRepository.findByUsername(username);
+        String email = updateProfileDto.getEmail();
+        String check = emailCheck(email);
+
+        if (check.equals("true")) {
+            currentUser.setEmail(updateProfileDto.getEmail());
+            userRepository.save(currentUser);
+            return "Email basariyla degistirildi !";
+        }
+        return check;
+    }
+
+    @Override
+    public String emailCheck(String email) {
+        if (!email.contains("@")) {
+            return "Lütfen geçerli bir email giriniz !";
+        }
+        return "true";
+    }
 }
