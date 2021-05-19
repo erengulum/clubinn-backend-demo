@@ -35,7 +35,14 @@ public class Chat {
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Message> messageList;
 
-    @OneToMany(fetch = FetchType.LAZY )
+
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "chat_user",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> userList;
 
 }

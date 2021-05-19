@@ -3,6 +3,8 @@ package com.hacettepe.clubinn.service.implementations;
 
 import com.hacettepe.clubinn.model.dto.ChatDto;
 import com.hacettepe.clubinn.model.dto.MessageDto;
+import com.hacettepe.clubinn.model.dto.MessageHistoryDto;
+import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.model.entity.Chat;
 import com.hacettepe.clubinn.model.entity.Message;
 import com.hacettepe.clubinn.model.entity.SubClub;
@@ -73,27 +75,27 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatDto join(Long id) {
+    public Boolean join(Long id) {
         Chat chat = chatRepository.getOne(id);
 
         User user = getAuthenticatedUser();
         if (user.getChat() != null) {
             log.error("User already in a chat !");
-            return null;
+            return Boolean.FALSE;
         }
-        user.setChat(chat);
+        user.getChat().add(chat);
         userRepository.save(user);
         chat.getUserList().add(user);
         chatRepository.save(chat);
 
         if (chat == null) {
-            return null;
+            return Boolean.FALSE;
         }
 
         ChatDto chatDto = modelMapper.map(chat, ChatDto.class);
         List<Message> messageList = messageRepository.getAllByChat_Id(id);
         chatDto.setMessageList(Arrays.asList(modelMapper.map(messageList, MessageDto[].class)));
-        return chatDto;
+        return Boolean.TRUE;
 
     }
 
@@ -115,6 +117,31 @@ public class ChatServiceImpl implements ChatService {
         String date = formatter.format(new Date());
 
         Chat chat = chatRepository.getOne(id);
+
+        Message newMessage = new Message();
+        newMessage.setContent(slangWordDetector(messageDto.getContent()));
+        newMessage.setDate(date);
+        newMessage.setChat(chat);
+        newMessage.setUser(getAuthenticatedUser());
+        messageRepository.save(newMessage);
+
+        chat.getMessageList().add(newMessage);
+        chatRepository.save(chat);
+        return modelMapper.map(newMessage, MessageDto.class);
+    }
+
+    @Override
+    public MessageDto sendMessageBySubclubId(Long subclubId, MessageDto messageDto) {
+
+        if(chatRepository.getBySubClubId(subclubId)==null){
+            log.warn("bu subgrup icin chat henüz olusturulmadi");
+            return null;
+        }
+        Long chatId = chatRepository.getBySubClubId(subclubId).getId();
+
+        String date = formatter.format(new Date());
+
+        Chat chat = chatRepository.getOne(chatId);
 
         Message newMessage = new Message();
         newMessage.setContent(slangWordDetector(messageDto.getContent()));
@@ -152,6 +179,33 @@ public class ChatServiceImpl implements ChatService {
         return stringBuilder.toString();
 
     }
+
+
+
+    @Override
+    public List<MessageHistoryDto> getChatMessages(Long chatId) {
+
+        List<Message> messages = messageRepository.getAllByChat_Id(chatId);
+
+         return Arrays.asList(modelMapper.map(messages, MessageHistoryDto[].class));
+    }
+
+
+    @Override
+    public List<MessageHistoryDto> getChatMessagesBySubclubId(Long subclubId) {
+
+        if(chatRepository.getBySubClubId(subclubId)==null){
+            return null;
+        }
+        Long chatId = chatRepository.getBySubClubId(subclubId).getId();
+
+        List<Message> messages = messageRepository.getAllByChat_Id(chatId);
+
+        return Arrays.asList(modelMapper.map(messages, MessageHistoryDto[].class));
+    }
+
+
+
 
     private User getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

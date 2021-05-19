@@ -9,4 +9,6 @@ public interface ChatRepository extends JpaRepository<Chat,Long> {
 
     Chat findBySubClub_SubClubName(String subClubName);
 
+    Chat getBySubClubId(Long subclubId);
+
 }

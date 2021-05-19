@@ -9,4 +9,5 @@ public interface MessageRepository extends JpaRepository<Message,Long> {
 
     List<Message> getAllByChat_Id(Long id);
 
+
 }

@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "subclubs")
@@ -25,7 +26,7 @@ public class SubClub {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "imageurl", length = 100, unique = true)
+    @Column(name = "imageurl", length = 200, unique = true)
     private String imageurl;
 
     @Column(name = "subClubName", length = 100, unique = true)
@@ -46,5 +47,22 @@ public class SubClub {
     @JoinColumn(name = "chat_id")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Chat chat;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "subclub_member",
+            joinColumns = @JoinColumn(name = "subclub_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Collection<User> members;
+
+
+    @OneToMany(mappedBy = "subClub", cascade = CascadeType.ALL)
+    private Collection<Announcement> announcements;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "admin_id")
+    private User admin;
 
 }

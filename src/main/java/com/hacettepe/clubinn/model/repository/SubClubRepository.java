@@ -13,6 +13,7 @@ public interface  SubClubRepository extends JpaRepository<SubClub,Long>  {
     List<SubClub> getAllByClubCategory_Id(Long categoryId);
 
 
+
     SubClub findBySubClubName(String sclubname);
 
 
