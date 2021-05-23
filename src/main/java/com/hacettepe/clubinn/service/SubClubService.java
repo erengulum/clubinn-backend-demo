@@ -28,14 +28,16 @@ public interface SubClubService {
 
     List<UserDto> getAllSubclubMembers(Long subclubId);
 
-    Boolean assignAdmin(Long subclubId,Long userId);
+    Boolean assignAdmin(Long subclubId, Long userId);
+
     UserDto getSubclubAdmin(Long subclubId);
 
+    Boolean createNewAnnouncement(AnnouncementDto announcementDto, Long subclubId);
 
-    Boolean createNewAnnouncement(AnnouncementDto announcementDto,Long subclubId);
     Boolean deleteSubClubAnnouncement(Long annoncementId);
+
     List<AnnouncementDto> getAllAnnouncements(Long subclubId);
 
-
+    List<SubClubDto> getAllByFormId(Long formId);
 
 }

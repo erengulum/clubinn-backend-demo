@@ -141,6 +141,17 @@ public class SubClubServiceImpl implements SubClubService{
     }
 
     @Override
+    public List<SubClubDto> getAllByFormId(Long formId) {
+
+        List<SubClub> subClubList = subClubRepository.getAllByForm_FormId(formId);
+        if (subClubList == null) {
+            return null;
+        } else {
+            return Arrays.asList(modelMapper.map(subClubList, SubClubDto[].class));
+        }
+    }
+
+    @Override
     public Boolean updateSubClub(SubClubDto subClubDto) {
         SubClub subclub = subClubRepository.findBySubClubName(subClubDto.getSubClubName());
         subclub.setSubClubName(subClubDto.getSubClubName());
