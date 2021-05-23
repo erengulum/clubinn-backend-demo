@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateProfileDto {
+public class MessageDto {
 
-    private String email;
+    private String content;
 
 }

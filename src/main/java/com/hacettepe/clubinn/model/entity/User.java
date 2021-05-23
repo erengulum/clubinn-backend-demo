@@ -1,8 +1,11 @@
 package com.hacettepe.clubinn.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 
 @Entity
@@ -37,19 +40,27 @@ public class User {
             @JoinColumn(name = "ROLE_ID") })
     private Role role;
 
-    @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     private Profile profile;
 
 
+    @ManyToMany(mappedBy = "userList")
+    private Collection<Chat> chat;
 
+
+    @ManyToMany(mappedBy = "members")
+    private Collection<SubClub> subclubs;
+
+
+    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Collection<Message> Message;
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Collection<SubClub> administrations;
 
     public User(Long id){
         this.id = id;
     }
-
-
-
-
-
 
 }

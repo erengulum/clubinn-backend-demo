@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface UserService {
 
-
     UserDto getByUsername(String username);
 
     UserDto save(UserDto user);
@@ -30,8 +29,9 @@ public interface UserService {
 
     String changePassword(PasswordChangeDto passwordChangeDto, String username);
 
-    String updateProfileWithEmail(UpdateProfileDto updateProfileDto , String username);
+    String updateProfileWithEmail(UpdateProfileDto updateProfileDto, String username);
 
     String emailCheck(String email);
+
 
 }

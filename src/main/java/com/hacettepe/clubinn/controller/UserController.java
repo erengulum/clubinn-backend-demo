@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @Slf4j
 @CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
 @RequestMapping(ApiPaths.UserPath.CTRL)
@@ -29,15 +28,11 @@ public class UserController {
         this.responseMessage = responseMessage;
     }
 
-
-
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getOne(@PathVariable String username){
         log.warn("GetOne(User icin) metodu basariyla calisti");
         return ResponseEntity.ok(userService.getByUsername(username));
     }
-
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/all",method = RequestMethod.GET)
@@ -64,8 +59,6 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-
-
     @RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
     public ResponseEntity<ProfileDto> getProfile(@PathVariable String username){
         log.warn("get profile(User icin) metodu basariyla calisti");
@@ -83,8 +76,6 @@ public class UserController {
         responseMessage.setResponseMessage(userService.updateProfileWithEmail(updateProfileDto, username));
         return ResponseEntity.ok(responseMessage);
     }
-
-
 
 
 }

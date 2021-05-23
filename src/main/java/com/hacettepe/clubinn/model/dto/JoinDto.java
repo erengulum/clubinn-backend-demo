@@ -1,5 +1,6 @@
 package com.hacettepe.clubinn.model.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateProfileDto {
+public class JoinDto {
 
-    private String email;
+    String username; //username of the member
 
+    Long subclubId;
 }

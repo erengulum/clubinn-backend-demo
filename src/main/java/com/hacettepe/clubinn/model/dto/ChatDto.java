@@ -4,11 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateProfileDto {
+public class ChatDto {
 
-    private String email;
+    private String subClubName;
+
+    private String chatDescription;
+
+    private Collection<MessageDto> messageList;
 
 }
