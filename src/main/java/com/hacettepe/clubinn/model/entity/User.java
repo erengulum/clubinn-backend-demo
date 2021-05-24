@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
@@ -14,6 +15,10 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
+    public User(Long id){
+        this.id = id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,12 +60,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Collection<Message> Message;
 
-
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<SubClub> administrations;
-
-    public User(Long id){
-        this.id = id;
-    }
 
 }

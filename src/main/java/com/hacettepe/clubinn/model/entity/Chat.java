@@ -2,6 +2,7 @@ package com.hacettepe.clubinn.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -27,6 +28,7 @@ public class Chat {
     @Column(name = "creation_date", length = 20)
     private String creationDate;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne( fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "subclub_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
