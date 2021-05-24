@@ -5,18 +5,20 @@ import com.hacettepe.clubinn.model.dto.FormDto;
 import com.hacettepe.clubinn.model.dto.SubClubDto;
 import com.hacettepe.clubinn.service.FormService;
 import com.hacettepe.clubinn.util.ApiPaths;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/form")
 @CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
+@Api(value = "Questionnaire API")
 public class FormController {
 
     private final FormService formService;
@@ -28,44 +30,42 @@ public class FormController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ApiOperation(value = "Create Form Operation", response = ResponseMessage.class)
     public ResponseEntity<ResponseMessage> createForm(@Validated @RequestBody FormDto formDto) {
         Boolean response = formService.createForm(formDto);
 
-        if(!response){
+        if (!response) {
             responseMessage.setResponseMessage("There is a problem during creation form. Please try again");
             return ResponseEntity.badRequest().body(responseMessage);
-        }
-
-        else{
+        } else {
             responseMessage.setResponseMessage("Form is successfully created");
             return ResponseEntity.ok(responseMessage);
         }
     }
 
-    @RequestMapping(value = "/selected",method = RequestMethod.GET)
-    public ResponseEntity<List<FormDto>> getAllSubClubDto(@Validated @RequestBody Long[] subClubIdList){
+    @RequestMapping(value = "/selected", method = RequestMethod.GET)
+    @ApiOperation(value = "Get All Selected SubClub Operation", response = FormDto.class)
+    public ResponseEntity<List<FormDto>> getAllSubClubDto(@Validated @RequestBody Long[] subClubIdList) {
         List<FormDto> formDtoList = formService.getAllBySubClub((subClubIdList));
         return ResponseEntity.ok(formDtoList);
     }
 
-    @RequestMapping(value = "/questionnaire",method = RequestMethod.GET)
-    public ResponseEntity<List<SubClubDto>> questionnaire(@Validated @RequestBody List<FormDto> formDtoList){
+    @RequestMapping(value = "/questionnaire", method = RequestMethod.GET)
+    @ApiOperation(value = "Questionnaire Operation", response = SubClubDto.class)
+    public ResponseEntity<List<SubClubDto>> questionnaire(@Validated @RequestBody List<FormDto> formDtoList) {
         List<SubClubDto> subClubDtoList = formService.questionnaire(formDtoList);
-        // X Y Z GRUBUNA GIRMEYE HAK KAZANDIN
-        // T GRUBUNA GIRME HAKKIN YOK
         return ResponseEntity.ok(subClubDtoList);
     }
 
     @RequestMapping(value = "/completed", method = RequestMethod.PUT)
+    @ApiOperation(value = "Form Complete Operation", response = ResponseMessage.class)
     public ResponseEntity<ResponseMessage> formCompleted(@Validated @RequestBody Long[] subClubIdList) {
         Boolean response = formService.formCompleted(subClubIdList);
 
-        if(!response){
+        if (!response) {
             responseMessage.setResponseMessage("There is a problem during form. Please try again");
             return ResponseEntity.badRequest().body(responseMessage);
-        }
-
-        else{
+        } else {
             responseMessage.setResponseMessage("Form is successfully finished");
             return ResponseEntity.ok(responseMessage);
         }
