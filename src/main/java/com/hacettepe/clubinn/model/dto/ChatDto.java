@@ -4,23 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubClubDto {
-
-    private Long id;
-
-    private String imageurl;
+public class ChatDto {
 
     private String subClubName;
 
-    private String description;
+    private String chatDescription;
 
-    private Long clubCategoryId;
-
-    private ClubCategoryDto clubCategory;
-
-
+    private Collection<MessageDto> messageList;
 
 }
