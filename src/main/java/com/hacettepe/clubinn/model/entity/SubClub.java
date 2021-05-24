@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,7 +27,7 @@ public class SubClub {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "imageurl", length = 200, unique = true)
+    @Column(name = "imageurl", length = 100, unique = true)
     private String imageurl;
 
     @Column(name = "subClubName", length = 100, unique = true)
@@ -43,11 +44,11 @@ public class SubClub {
             @JoinColumn(name = "CLUBCATEGORY_ID") })
     private ClubCategory clubCategory;
 
+    @EqualsAndHashCode.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "chat_id")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Chat chat;
-
 
     @ManyToMany
     @JoinTable(
@@ -56,7 +57,6 @@ public class SubClub {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> members;
 
-
     @OneToMany(mappedBy = "subClub", cascade = CascadeType.ALL)
     private Collection<Announcement> announcements;
 
@@ -64,5 +64,11 @@ public class SubClub {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "admin_id")
     private User admin;
+
+    @EqualsAndHashCode.Exclude
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "form_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Form form;
 
 }
