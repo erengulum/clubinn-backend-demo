@@ -1,10 +1,8 @@
 package com.hacettepe.clubinn.service.implementations;
-// disconnect stringten çek
 
 import com.hacettepe.clubinn.model.dto.ChatDto;
 import com.hacettepe.clubinn.model.dto.MessageDto;
 import com.hacettepe.clubinn.model.dto.MessageHistoryDto;
-import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.model.entity.Chat;
 import com.hacettepe.clubinn.model.entity.Message;
 import com.hacettepe.clubinn.model.entity.SubClub;

@@ -59,14 +59,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
-
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         Role role = user.getRole();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         return authorities;
     }
-
 
     @Override
     public UserDto getByUsername(String username) {
@@ -80,7 +78,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return Arrays.asList(modelMapper.map(data, UserDto[].class));
     }
 
-
     public void createProfile(User user) {
         Profile profile = new Profile();
         profile.setUser(user);
@@ -92,7 +89,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         Profile profile = profileRepository.findByUserUsername(username);
         return modelMapper.map(profile, ProfileDto.class);
     }
-
 
     @Override
     public String updateProfile(ProfileDto profileDto, String username) {
@@ -117,19 +113,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean isUsernameExists(String username) {
-        if (userRepository.findByUsername(username.toLowerCase()) == null) {
-            return false;
-        }
-        return true;
+        return userRepository.findByUsername(username.toLowerCase()) != null;
     }
 
 
     @Override
     public Boolean isEmailExists(String email) {
-        if (userRepository.findByEmail(email.toLowerCase()) == null) {
-            return false;
-        }
-        return true;
+        return userRepository.findByEmail(email.toLowerCase()) != null;
     }
 
 
@@ -144,30 +134,33 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
-
     @Transactional
     public Boolean register(RegistrationRequest registrationRequest) {
         try {
-            log.warn("Register'a giriyor");
-            User user = new User();
-            user.setEmail(registrationRequest.getEmail().toLowerCase());
-            user.setFirstName(registrationRequest.getFirstName());
-            user.setSurname(registrationRequest.getSurname());
-            user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
-            user.setUsername(registrationRequest.getUsername().toLowerCase());
-            final Role role = roleRepository.findByName("USER");
-            //System.out.println(role.getName());
-            user.setRole(role);
-            userRepository.save(user);
-            this.createProfile(user);
-            return Boolean.TRUE;
+            if (emailCheck(registrationRequest.getEmail()).equals("true")) {
+                log.warn("Register'a giriyor");
+                User user = new User();
+                user.setEmail(registrationRequest.getEmail().toLowerCase());
+                user.setFirstName(registrationRequest.getFirstName());
+                user.setSurname(registrationRequest.getSurname());
+                user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
+                user.setUsername(registrationRequest.getUsername().toLowerCase());
+                final Role role = roleRepository.findByName("USER");
+                //System.out.println(role.getName());
+                user.setRole(role);
+                userRepository.save(user);
+                this.createProfile(user);
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
+
 
         } catch (Exception e) {
             log.error("Registration has been failed. Exception=", e);
             return Boolean.FALSE;
         }
     }
-
 
     @Override
     public String changePassword(PasswordChangeDto passwordChangeDto, String userName) {
@@ -189,7 +182,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return "Şifre kullanıcın önceki şifresi ile uyuşmuyor";
     }
-
 
     private String passwordCheck(String password) {
 

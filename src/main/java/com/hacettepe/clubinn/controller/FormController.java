@@ -43,14 +43,14 @@ public class FormController {
         }
     }
 
-    @RequestMapping(value = "/selected", method = RequestMethod.GET)
+    @RequestMapping(value = "/selected", method = RequestMethod.POST)
     @ApiOperation(value = "Get All Selected SubClub Operation", response = FormDto.class)
     public ResponseEntity<List<FormDto>> getAllSubClubDto(@Validated @RequestBody Long[] subClubIdList) {
         List<FormDto> formDtoList = formService.getAllBySubClub((subClubIdList));
         return ResponseEntity.ok(formDtoList);
     }
 
-    @RequestMapping(value = "/questionnaire", method = RequestMethod.GET)
+    @RequestMapping(value = "/questionnaire", method = RequestMethod.POST)
     @ApiOperation(value = "Questionnaire Operation", response = SubClubDto.class)
     public ResponseEntity<List<SubClubDto>> questionnaire(@Validated @RequestBody List<FormDto> formDtoList) {
         List<SubClubDto> subClubDtoList = formService.questionnaire(formDtoList);
