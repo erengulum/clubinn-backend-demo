@@ -21,3 +21,4 @@ public class MessageHistoryDto {
     @ApiModelProperty(value = "Message History User")
     private UserDto user;
 }
+

@@ -29,18 +29,15 @@ public class ChatController {
     }
 
 
-
     @RequestMapping(value = "/{chatid}", method = RequestMethod.GET)
     public ResponseEntity<ResponseMessage> joinChat(@PathVariable Long chatid) {
         Boolean response = chatService.join(chatid);
-        if(response == false){
+        if (response == false) {
             responseMessage.setResponseMessage("User already in a chat !");
             return null;
         }
         return ResponseEntity.ok(responseMessage);
     }
-
-
 
 
     @RequestMapping(value = "/disconnect/{chatid}", method = RequestMethod.PUT)
@@ -57,8 +54,8 @@ public class ChatController {
 
 
     @RequestMapping(value = "/sendbysubgroup/{subgroupId}/{username}", method = RequestMethod.POST)
-    public ResponseEntity<MessageHistoryDto> sendBySubGroupId(@PathVariable("subgroupId")  Long subgroupId, @PathVariable("username") String username, @Validated @RequestBody MessageDto messageDto) {
-        return ResponseEntity.ok(chatService.sendMessageBySubclubId(subgroupId, username ,messageDto));
+    public ResponseEntity<MessageHistoryDto> sendBySubGroupId(@PathVariable("subgroupId") Long subgroupId, @PathVariable("username") String username, @Validated @RequestBody MessageDto messageDto) {
+        return ResponseEntity.ok(chatService.sendMessageBySubclubId(subgroupId, username, messageDto));
 
     }
 

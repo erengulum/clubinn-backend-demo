@@ -31,3 +31,4 @@ public class ClubCategoryRequestDto {
     private String imageurl;
 
 }
+

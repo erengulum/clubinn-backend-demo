@@ -25,3 +25,4 @@ public class ClubCategoryDto {
     private String description;
 
 }
+

@@ -24,3 +24,4 @@ public class ChatDto {
     private Collection<MessageDto> messageList;
 
 }
+

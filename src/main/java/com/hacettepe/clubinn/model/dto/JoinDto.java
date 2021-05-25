@@ -18,3 +18,4 @@ public class JoinDto {
     @ApiModelProperty(value = "Join SubClub ID")
     Long subclubId;
 }
+

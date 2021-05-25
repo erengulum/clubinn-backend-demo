@@ -25,3 +25,4 @@ public class ProfileDto {
     private String hobbies;
 
 }
+

@@ -106,11 +106,11 @@ public class FormServiceImpl implements FormService {
 
         FormDto[] formDtoList = new FormDto[length];
 
-        for(int i = 0 ; i < subClubIdList.length ; i++){
+        for (int i = 0; i < subClubIdList.length; i++) {
             System.out.println(subClubIdList[i]);
             Form currentForm = formRepository.findBySubClub_Id(subClubIdList[i]);
             System.out.println(currentForm.getSubClub().getSubClubName());
-            formDtoList[i] = modelMapper.map(currentForm , FormDto.class);
+            formDtoList[i] = modelMapper.map(currentForm, FormDto.class);
             formDtoList[i].setBagliolduguGrup(currentForm.getSubClub().getSubClubName());
         }
 
@@ -138,7 +138,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public int percentageCalculator(int answer) {
-        switch (answer){
+        switch (answer) {
             case 0:
                 return 0;
             case 1:
