@@ -1,26 +1,24 @@
 package com.hacettepe.clubinn.model.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hacettepe.clubinn.model.entity.User;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(value = "Message History Data Transfer Object")
 public class MessageHistoryDto {
 
+    @ApiModelProperty(value = "Message History Date")
     private String date;
 
+    @ApiModelProperty(value = "Message History Content")
     private String content;
 
+    @ApiModelProperty(value = "Message History User")
     private UserDto user;
 }
+

@@ -1,8 +1,7 @@
 package com.hacettepe.clubinn.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hacettepe.clubinn.model.entity.User;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,15 +9,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(value = "Profile Data Transfer Object")
 public class ProfileDto {
 
-
+    @ApiModelProperty(value = "Profile Phone")
     private String phone;
 
+    @ApiModelProperty(value = "Profile City")
     private String city;
 
+    @ApiModelProperty(value = "Profile About")
     private String about;
 
+    @ApiModelProperty(value = "Profile Hobbies")
     private String hobbies;
 
 }
+

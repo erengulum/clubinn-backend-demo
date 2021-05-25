@@ -12,7 +12,7 @@ public interface FormService {
 
     Boolean createForm(FormDto formDto);
 
-    Boolean createQuestions(Collection<QuestionDto> questionList , Form form);
+    Boolean createQuestions(Collection<QuestionDto> questionList, Form form);
 
     List<FormDto> getAllBySubClub(Long[] subClubIdList);
 
