@@ -77,6 +77,11 @@ public class SubClubController {
         return ResponseEntity.ok(data);
     }
 
+    @RequestMapping(value = "/allnotmember", method = RequestMethod.GET)
+    public ResponseEntity<List<SubClubDto>> getAllButNotMember() {
+        List<SubClubDto> data = subClubService.getAllSubClubNotAMember();
+        return ResponseEntity.ok(data);
+    }
 
     @RequestMapping(value = "/all/{categoryId}", method = RequestMethod.GET)
     public ResponseEntity<List<SubClubDto>> getAllSubClubsByCategory(@PathVariable Long categoryId) {
