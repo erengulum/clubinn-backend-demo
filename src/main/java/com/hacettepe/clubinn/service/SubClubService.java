@@ -11,6 +11,8 @@ public interface SubClubService {
 
     List<SubClubDto> getAll();
 
+    List<SubClubDto> getAllSubClubNotAMember();
+
     Boolean deleteSubClub(Long id);
 
     Boolean createNewSubClub(SubClubDto subClubDto);

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -60,6 +61,23 @@ public class SubClubServiceImpl implements SubClubService{
             return null;
         } else {
             return Arrays.asList(modelMapper.map(subClubList, SubClubDto[].class));
+        }
+    }
+
+    @Override
+    public List<SubClubDto> getAllSubClubNotAMember() {
+        List<SubClub> subClubList = subClubRepository.findAll();
+        List<SubClub> notMemberSubClubList = new ArrayList<>();
+        User user = getAuthenticatedUser();
+        for(SubClub subClub : subClubList){
+            if(!subClub.getMembers().contains(user)){
+                notMemberSubClubList.add(subClub);
+            }
+        }
+        if (notMemberSubClubList == null) {
+            return null;
+        } else {
+            return Arrays.asList(modelMapper.map(notMemberSubClubList, SubClubDto[].class));
         }
     }
 
@@ -222,7 +240,6 @@ public class SubClubServiceImpl implements SubClubService{
         return true;
 
     }
-
 
     @Override
     public Boolean deleteSubClubAnnouncement(Long annoncementId) {
