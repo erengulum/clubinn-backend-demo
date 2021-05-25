@@ -71,4 +71,7 @@ public class SubClub {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Form form;
 
+    @OneToMany(mappedBy = "ownerSubClub", cascade = CascadeType.ALL)
+    private Collection<Feedback> feedbacks;
+
 }

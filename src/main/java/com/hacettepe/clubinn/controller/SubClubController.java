@@ -160,6 +160,54 @@ public class SubClubController {
 
     }
 
+    // FEEDBACK CRUD
+
+    @RequestMapping(value = "feedbacks/create/{subclubId}", method = RequestMethod.POST)
+    public ResponseEntity<FeedbackDto> createNewFeedback(@PathVariable Long subclubId, @Validated @RequestBody FeedbackDto feedbackDto) {
+
+        return ResponseEntity.ok(subClubService.createNewFeedback(feedbackDto,subclubId));
+
+    }
+
+    @RequestMapping(value = "feedbacks/all/{subclubId}",method = RequestMethod.GET)
+    public ResponseEntity<List<FeedbackDto>> getAllFeedbacks(@PathVariable Long subclubId){
+        List<FeedbackDto> data = subClubService.getAllFeedbacks(subclubId);
+        return ResponseEntity.ok(data);
+    }
+
+    @RequestMapping(value = "feedbacks/update/{feedbackId}" , method=RequestMethod.PUT)
+    public ResponseEntity<ResponseMessage> updateFeedback(@PathVariable Long feedbackId, @RequestBody FeedbackDto feedbackDto){
+
+        Boolean response = subClubService.updateFeedback(feedbackDto,feedbackId);
+
+        if(!response){
+            responseMessage.setResponseMessage("Error while updating feedback");
+            return ResponseEntity.badRequest().body(responseMessage);
+        }
+
+        else{
+            responseMessage.setResponseMessage("Feedback is successfully updated");
+            return ResponseEntity.ok(responseMessage);
+        }
+
+    }
+
+    @RequestMapping(value = "feedbacks/delete/{feedbackId}", method = RequestMethod.DELETE)
+    public ResponseEntity<ResponseMessage> deleteFeedback(@PathVariable Long feedbackId) {
+
+        Boolean response = subClubService.deleteFeedback(feedbackId);
+
+        if(!response){
+            responseMessage.setResponseMessage("Silme işlemi sirasında bir hata meydana geldi.Lütfen tekrar deneyiniz");
+            return ResponseEntity.badRequest().body(responseMessage);
+        }
+
+        else{
+            responseMessage.setResponseMessage("Silme islemi basariyla gerceklestirildi");
+            return ResponseEntity.ok(responseMessage);
+        }
+
+    }
 
     //Administration
     @RequestMapping(value = "/{subclubId}/admin/{userId}", method = RequestMethod.GET)
