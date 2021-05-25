@@ -137,7 +137,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public Boolean register(RegistrationRequest registrationRequest) {
         try {
-            if (emailCheck(registrationRequest.getEmail()).equals("true")) {
                 log.warn("Register'a giriyor");
                 User user = new User();
                 user.setEmail(registrationRequest.getEmail().toLowerCase());
@@ -151,9 +150,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 userRepository.save(user);
                 this.createProfile(user);
                 return Boolean.TRUE;
-            } else {
-                return Boolean.FALSE;
-            }
+
 
 
         } catch (Exception e) {

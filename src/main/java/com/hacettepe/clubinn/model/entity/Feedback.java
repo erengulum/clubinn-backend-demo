@@ -36,8 +36,8 @@ public class Feedback {
     @JoinColumn(name = "owner")
     private User owner;
 
-    @Column(name = "rating")
-    private Long rating;
+    @Column(name = "feedbacktype")
+    private String feedbackType;
 
     @Column(name = "comment", length = 255)
     private String comment;

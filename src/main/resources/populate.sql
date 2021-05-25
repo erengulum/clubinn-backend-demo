@@ -131,4 +131,3 @@ INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES 
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,28);
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,29);
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,30);
-
