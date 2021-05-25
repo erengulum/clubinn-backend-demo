@@ -26,9 +26,9 @@ public class Message {
     @Column(name = "send_date", length = 20)
     private String date;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "chat_id")
+    @JoinColumn(name = "chat_id",nullable = true)
     private Chat chat;
 
     @ManyToOne

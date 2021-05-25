@@ -56,9 +56,9 @@ public class ChatController {
     }
 
 
-    @RequestMapping(value = "/sendbysubgroup/{subgroupId}", method = RequestMethod.POST)
-    public ResponseEntity<MessageDto> sendBySubGroupId(@PathVariable Long subgroupId, @Validated @RequestBody MessageDto messageDto) {
-        return ResponseEntity.ok(chatService.sendMessageBySubclubId(subgroupId, messageDto));
+    @RequestMapping(value = "/sendbysubgroup/{subgroupId}/{username}", method = RequestMethod.POST)
+    public ResponseEntity<MessageHistoryDto> sendBySubGroupId(@PathVariable("subgroupId")  Long subgroupId, @PathVariable("username") String username, @Validated @RequestBody MessageDto messageDto) {
+        return ResponseEntity.ok(chatService.sendMessageBySubclubId(subgroupId, username ,messageDto));
 
     }
 
@@ -72,7 +72,7 @@ public class ChatController {
 
     @RequestMapping(value = "subclub/messages/{subclubId}", method = RequestMethod.GET)
     public ResponseEntity<List<MessageHistoryDto>> getMessageListBySubclubId(@PathVariable Long subclubId) {
-
+        log.warn("döndürülen mesajlar" + chatService.getChatMessagesBySubclubId(subclubId));
         return ResponseEntity.ok(chatService.getChatMessagesBySubclubId(subclubId));
     }
 
