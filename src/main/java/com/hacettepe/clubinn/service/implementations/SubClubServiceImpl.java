@@ -2,14 +2,12 @@ package com.hacettepe.clubinn.service.implementations;
 
 import com.hacettepe.clubinn.model.dto.*;
 import com.hacettepe.clubinn.model.entity.*;
-import com.hacettepe.clubinn.model.repository.AnnouncementRepository;
-import com.hacettepe.clubinn.model.repository.ClubCategoryRepository;
-import com.hacettepe.clubinn.model.repository.SubClubRepository;
-import com.hacettepe.clubinn.model.repository.UserRepository;
+import com.hacettepe.clubinn.model.repository.*;
 import com.hacettepe.clubinn.service.SubClubService;
-import com.hacettepe.clubinn.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -26,17 +24,19 @@ public class SubClubServiceImpl implements SubClubService{
     private final ChatServiceImpl chatService;
     private final UserRepository userRepository;
     private final AnnouncementRepository announcementRepository;
+    private final FeedbackRepository feedbackRepository;
 
     public SubClubServiceImpl(ModelMapper modelMapper, SubClubRepository subClubRepository,
                               ClubCategoryRepository clubCategoryRepository,
-                              ChatServiceImpl chatService,UserRepository userRepository,
-                              AnnouncementRepository announcementRepository) {
+                              ChatServiceImpl chatService, UserRepository userRepository,
+                              AnnouncementRepository announcementRepository, FeedbackRepository feedbackRepository) {
         this.modelMapper = modelMapper;
         this.subClubRepository = subClubRepository;
         this.clubCategoryRepository = clubCategoryRepository;
         this.chatService = chatService;
         this.userRepository = userRepository;
         this.announcementRepository = announcementRepository;
+        this.feedbackRepository = feedbackRepository;
     }
 
     @Override
@@ -245,5 +245,77 @@ public class SubClubServiceImpl implements SubClubService{
         return Arrays.asList(modelMapper.map(annons, AnnouncementDto[].class));
     }
 
+    // FEEDBACK CRUD
 
+    @Override
+    public FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId) {
+
+        if(!subClubRepository.existsById(subClubId)){
+            log.warn("Error while creating feedback");
+            return null;
+        }
+
+        SubClub subClub = subClubRepository.getOne(subClubId);
+
+        User user = getAuthenticatedUser();
+
+        Feedback feedback = modelMapper.map(feedbackDto, Feedback.class);
+        feedback.setOwnerSubClub(subClub);
+        feedback.setOwner(user);
+        feedbackRepository.save(feedback);
+
+        subClub.getFeedbacks().add(feedback);
+        subClubRepository.save(subClub);
+
+
+        return modelMapper.map(feedback,FeedbackDto.class);
+    }
+
+    @Override
+    public List<FeedbackDto> getAllFeedbacks(Long subClubId) {
+
+        List<Feedback> feedbackList = feedbackRepository.getAllByOwnerSubClub_Id(subClubId);
+        if(feedbackList==null)
+            return null;
+        return Arrays.asList(modelMapper.map(feedbackList,FeedbackDto[].class));
+
+    }
+
+    @Override
+    public Boolean updateFeedback(FeedbackDto feedbackDto,Long feedbackId) {
+
+        if(!feedbackRepository.existsById(feedbackId))
+            return Boolean.FALSE;
+
+        Feedback feedback = feedbackRepository.getOne(feedbackId);
+        feedback.setComment(feedbackDto.getComment());
+        feedback.setRating(feedbackDto.getRating());
+        feedbackRepository.save(feedback);
+
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean deleteFeedback(Long feedbackId) {
+
+        if(!feedbackRepository.existsById(feedbackId))
+            return Boolean.FALSE;
+
+        Feedback feedback = feedbackRepository.getOne(feedbackId);
+        feedbackRepository.delete(feedback);
+        return Boolean.TRUE;
+
+    }
+
+    private User getAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return userRepository.findByUsername(username);
+    }
 }

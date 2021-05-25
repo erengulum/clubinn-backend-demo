@@ -1,9 +1,6 @@
 package com.hacettepe.clubinn.service;
 
-import com.hacettepe.clubinn.model.dto.AnnouncementDto;
-import com.hacettepe.clubinn.model.dto.JoinDto;
-import com.hacettepe.clubinn.model.dto.SubClubDto;
-import com.hacettepe.clubinn.model.dto.UserDto;
+import com.hacettepe.clubinn.model.dto.*;
 
 
 import java.util.List;
@@ -39,5 +36,13 @@ public interface SubClubService {
     List<AnnouncementDto> getAllAnnouncements(Long subclubId);
 
     List<SubClubDto> getAllByFormId(Long formId);
+
+    FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId);
+
+    List<FeedbackDto> getAllFeedbacks(Long subClubId);
+
+    Boolean updateFeedback(FeedbackDto feedbackDto,Long feedbackId);
+
+    Boolean deleteFeedback(Long feedbackId);
 
 }
