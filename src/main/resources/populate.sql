@@ -2,14 +2,14 @@ INSERT INTO roles(role_id,role_name)  VALUES (1,'USER');
 INSERT INTO roles(role_id,role_name)  VALUES (2,'ADMIN');
 INSERT INTO roles(role_id,role_name)  VALUES (3,'SUBCLUBADMIN');
 
-/*INSERT INTO users(id,uname,pwd,firstname,surname,email) VALUES (1,'admin','$2a$10$VF9rrlyhAIQqTsgEF6u0FuhuTB.9ZFWMDD4pFS8gEEfbWIXYmsdZK','Firat','BILGE','firat.bilge@yahoo.com');
+INSERT INTO users(id,uname,pwd,firstname,surname,email) VALUES (1,'admin','$2a$10$VF9rrlyhAIQqTsgEF6u0FuhuTB.9ZFWMDD4pFS8gEEfbWIXYmsdZK','Firat','BILGE','firat.bilge@yahoo.com');
 INSERT INTO users(id,uname,pwd,firstname,surname,email) VALUES (2,'user','$2a$10$6RnGeibWXl1pI9ze57hXju9FirRNwTwVwlkqi2jfOJ/PxLlhWcoqu','Metin','DURMAZ','metin.durmaz@yahoo.com');
 
 INSERT INTO user_roles(role_id, user_id) VALUES (2,1);
 INSERT INTO user_roles(role_id, user_id) VALUES (1,2);
 
-INSERT INTO userprofile(profile_id,user_id,phone,city,about,hobbies) VALUES(1,1,'+905328097162','Ankara','Who loves SQL', 'AI , C++, SQL');
-INSERT INTO userprofile(profile_id,user_id,phone,city,about,hobbies) VALUES(2,2,'+905358095462','Istanbul','Who loves coding' , 'Linux , Python, NoSQL');*/
+INSERT INTO userprofile(profile_id,user_id,phone,city,about,hobbies) VALUES(150,1,'+905328097162','Ankara','Who loves SQL', 'AI , C++, SQL');
+INSERT INTO userprofile(profile_id,user_id,phone,city,about,hobbies) VALUES(151,2,'+905358095462','Istanbul','Who loves coding' , 'Linux , Python, NoSQL');
 
 INSERT INTO clubcategory(category_id,clubname, description, imageurl)  VALUES (1,'Book Club','Description for Book Club','assets/img/books.jpg');
 INSERT INTO clubcategory(category_id,clubname, description, imageurl)  VALUES (2,'Game Club','Description for Game Club','assets/img/game.png');
@@ -131,4 +131,3 @@ INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES 
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,28);
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,29);
 INSERT INTO forms_question_list(form_form_id, question_list_question_id) VALUES (6,30);
-

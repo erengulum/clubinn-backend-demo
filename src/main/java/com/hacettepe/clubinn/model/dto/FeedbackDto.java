@@ -13,7 +13,7 @@ public class FeedbackDto {
 
     private UserDto owner;
 
-    private Long rating;
+    private String feedbackType;
 
     private String comment;
 

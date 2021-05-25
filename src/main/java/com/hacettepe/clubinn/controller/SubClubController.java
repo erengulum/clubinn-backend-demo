@@ -162,15 +162,16 @@ public class SubClubController {
 
     // FEEDBACK CRUD
 
-    @RequestMapping(value = "feedbacks/create/{subclubId}", method = RequestMethod.POST)
-    public ResponseEntity<FeedbackDto> createNewFeedback(@PathVariable Long subclubId, @Validated @RequestBody FeedbackDto feedbackDto) {
+    @RequestMapping(value = "feedbacks/create/{subclubId}/{username}", method = RequestMethod.POST)
+    public ResponseEntity<FeedbackDto> createNewFeedback(@PathVariable("subclubId") Long subclubId, @PathVariable("username") String username, @Validated @RequestBody FeedbackDto feedbackDto) {
 
-        return ResponseEntity.ok(subClubService.createNewFeedback(feedbackDto,subclubId));
+        return ResponseEntity.ok(subClubService.createNewFeedback(feedbackDto,subclubId,username));
 
     }
 
+
     @RequestMapping(value = "feedbacks/all/{subclubId}",method = RequestMethod.GET)
-    public ResponseEntity<List<FeedbackDto>> getAllFeedbacks(@PathVariable Long subclubId){
+    public ResponseEntity<List<FeedbackDto>> getAllFeedbacksBySubClubId(@PathVariable Long subclubId){
         List<FeedbackDto> data = subClubService.getAllFeedbacks(subclubId);
         return ResponseEntity.ok(data);
     }

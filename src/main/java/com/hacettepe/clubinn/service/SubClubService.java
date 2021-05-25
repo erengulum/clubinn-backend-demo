@@ -37,7 +37,7 @@ public interface SubClubService {
 
     List<SubClubDto> getAllByFormId(Long formId);
 
-    FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId);
+    FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId,String username);
 
     List<FeedbackDto> getAllFeedbacks(Long subClubId);
 

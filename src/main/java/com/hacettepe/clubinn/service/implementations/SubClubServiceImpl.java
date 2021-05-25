@@ -248,7 +248,7 @@ public class SubClubServiceImpl implements SubClubService{
     // FEEDBACK CRUD
 
     @Override
-    public FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId) {
+    public FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId, String username) {
 
         if(!subClubRepository.existsById(subClubId)){
             log.warn("Error while creating feedback");
@@ -257,7 +257,10 @@ public class SubClubServiceImpl implements SubClubService{
 
         SubClub subClub = subClubRepository.getOne(subClubId);
 
-        User user = getAuthenticatedUser();
+        User user = userRepository.findByUsername(username);
+        if(user==null){
+            return null;
+        }
 
         Feedback feedback = modelMapper.map(feedbackDto, Feedback.class);
         feedback.setOwnerSubClub(subClub);
@@ -289,7 +292,6 @@ public class SubClubServiceImpl implements SubClubService{
 
         Feedback feedback = feedbackRepository.getOne(feedbackId);
         feedback.setComment(feedbackDto.getComment());
-        feedback.setRating(feedbackDto.getRating());
         feedbackRepository.save(feedback);
 
         return Boolean.TRUE;
