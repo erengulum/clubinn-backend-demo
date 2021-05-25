@@ -209,13 +209,14 @@ public class SubClubController {
     //Get Admin of the subclub
     @RequestMapping(value = "/getadmin/{subclubId}", method=RequestMethod.GET)
     public ResponseEntity<UserDto> getAdmin(@PathVariable Long subclubId) {
+        log.warn("getAdmin calisiyor");
         UserDto response = subClubService.getSubclubAdmin(subclubId);
 
         if(response !=null){
             return ResponseEntity.ok(response);
         }
         else{
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok(null);
         }
 
     }

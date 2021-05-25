@@ -32,7 +32,8 @@ public class Chat {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SubClub subClub;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat" ,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Collection<Message> messageList;
 
 

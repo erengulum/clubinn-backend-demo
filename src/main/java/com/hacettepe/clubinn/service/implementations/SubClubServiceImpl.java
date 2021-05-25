@@ -78,7 +78,6 @@ public class SubClubServiceImpl implements SubClubService{
     public Boolean deleteSubClub(Long id) {
 
         SubClub subclub = subClubRepository.getOne(id);
-        chatService.deleteChat(subclub);
 
         if (subclub != null) {
             subClubRepository.delete(subclub);
@@ -231,7 +230,7 @@ public class SubClubServiceImpl implements SubClubService{
     public List<AnnouncementDto> getAllAnnouncements(Long subclubId) {
 
         Collection<Announcement> annons =  announcementRepository.findAllBySubClub_Id(subclubId);
-        log.warn("members collection basari ile alindi");
+        log.warn("announcement collection basari ile alindi");
         return Arrays.asList(modelMapper.map(annons, AnnouncementDto[].class));
     }
 

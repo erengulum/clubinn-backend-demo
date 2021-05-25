@@ -21,7 +21,7 @@ public interface ChatService {
 
     MessageDto sendMessage(Long id, MessageDto messageDto);
 
-    MessageDto sendMessageBySubclubId(Long subgroupId, MessageDto messageDto);
+    MessageHistoryDto sendMessageBySubclubId(Long subgroupId,String senderUsername,MessageDto messageDto);
 
     String slangWordDetector(String message);
 
