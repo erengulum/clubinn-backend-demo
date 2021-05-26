@@ -36,5 +36,4 @@ public interface UserService {
     void sendEmail(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException;
     String emailCheck(String email);
 
-
 }

@@ -21,4 +21,5 @@ public interface FormService {
     int percentageCalculator(int answer);
 
     Boolean formCompleted(Long[] subClubIdList);
+
 }

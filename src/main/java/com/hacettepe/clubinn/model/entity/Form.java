@@ -15,8 +15,6 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-
 public class Form {
 
     @Id
@@ -25,13 +23,12 @@ public class Form {
     private Long formId;
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "baglioldugugrup")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SubClub subClub;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Collection<Question> questionList;
-
 
 }

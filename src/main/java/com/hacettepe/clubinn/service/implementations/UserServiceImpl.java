@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
 
+    /**
+     * It loads the current user.
+     *
+     * @return --> Current authenticated user details.
+     **/
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username.toLowerCase());
         if (user == null) {
@@ -62,7 +67,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
     }
 
-
+    /**
+     * Saves the user in the database
+     *
+     * @param user --> User dto from frontend
+     * @return --> Current authenticated user
+     **/
     @Override
     @Transactional
     public UserDto save(UserDto user) {
@@ -73,6 +83,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
+    /**
+     * It helps to get Authority from the user.
+     *
+     * @param user --> Current user
+     * @return --> Granted Authority
+     **/
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         Role role = user.getRole();
@@ -80,36 +96,63 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return authorities;
     }
 
+    /**
+     * It allows to retrieve the user with the username from the database.
+     *
+     * @return --> Current authenticated user
+     **/
     @Override
     public UserDto getByUsername(String username) {
         User tempUser = userRepository.findByUsername(username);
         return modelMapper.map(tempUser, UserDto.class);
     }
 
-
+    /**
+     * Retrieves all registered users in the database.
+     *
+     * @return --> All user dto.
+     **/
     public List<UserDto> getAll() {
         List<User> data = userRepository.findAll();
         return Arrays.asList(modelMapper.map(data, UserDto[].class));
     }
 
+    /**
+     * Creates a profile for the user.
+     *
+     * @param user --> Current user
+     **/
     public void createProfile(User user) {
         Profile profile = new Profile();
         profile.setUser(user);
         profileRepository.save(profile);
     }
 
+    /**
+     * It finds the user's profile with the username coming from the parameter.
+     *
+     * @param username --> User name
+     * @return --> Current authenticated user
+     **/
     @Override
     public ProfileDto getProfile(String username) {
         Profile profile = profileRepository.findByUserUsername(username);
         return modelMapper.map(profile, ProfileDto.class);
     }
 
+    /**
+     * It updates the profile of the user with the profile dto coming from the parameter.
+     *
+     * @param username   --> Current user name
+     * @param profileDto --> Profile dto from frontend
+     * @return --> Current authenticated user
+     **/
     @Override
     public String updateProfile(ProfileDto profileDto, String username) {
-        log.warn("updateprofile service func calisiyor:", profileDto.getHobbies());
+        log.warn("updateprofile service func calisiyor:");
 
         Profile currentProfile = profileRepository.findByUserUsername(username);
-        log.warn("profile repostory basaili bir sekilde cekildi:", currentProfile.getUser());
+        log.warn("profile repostory basaili bir sekilde cekildi:");
         currentProfile.setAbout(profileDto.getAbout());
 
         currentProfile.setCity(profileDto.getCity());
@@ -125,18 +168,35 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
+    /**
+     * It is used to find users registered in the database with their username.
+     *
+     * @param username --> Current user name
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean isUsernameExists(String username) {
         return userRepository.findByUsername(username.toLowerCase()) != null;
     }
 
 
+    /**
+     * It is used to find user's email in the database with their username.
+     *
+     * @param email --> Current user email
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean isEmailExists(String email) {
         return userRepository.findByEmail(email.toLowerCase()) != null;
     }
 
-
+    /**
+     * Deletes a user from the database with the user ID.
+     *
+     * @param id --> Current user ID
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
@@ -148,6 +208,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
+    /**
+     * Registers the user in the database.
+     *
+     * @param registrationRequest --> Registration request dto from frontend
+     * @return --> Boolean message
+     **/
     @Transactional
     public Boolean register(RegistrationRequest registrationRequest) {
         try {
@@ -169,14 +235,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
                 return Boolean.TRUE;
 
-
-
         } catch (Exception e) {
             log.error("Registration has been failed.Please use your own e-mail address and try again. Exception=", e);
             return Boolean.FALSE;
         }
     }
 
+    /**
+     * It allows to change the user's password.
+     *
+     * @param passwordChangeDto --> Password change dto from frontend
+     * @param userName          --> Current username
+     * @return --> Response message
+     **/
     @Override
     public String changePassword(PasswordChangeDto passwordChangeDto, String userName) {
 
@@ -198,6 +269,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return "Girilen şifre kullanıcının önceki şifresi ile uyuşmuyor";
     }
 
+    /**
+     * It determines whether the user's password complies with the rules.
+     *
+     * @param password --> New password
+     * @return --> Response message
+     **/
     private String passwordCheck(String password) {
 
         if (!((password.length() >= 8) && (password.length() <= 15))) {
@@ -272,6 +349,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return "true";
     }
 
+    /**
+     * It allows the user to update their email.
+     *
+     * @param updateProfileDto --> Update profile dto from frontend
+     * @param username         --> Current user name
+     * @return --> Response message
+     **/
     @Override
     public String updateProfileWithEmail(UpdateProfileDto updateProfileDto, String username) {
 
@@ -287,6 +371,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return check;
     }
 
+    /**
+     * It checks whether the user's e-mail complies with the rules.
+     *
+     * @param email --> Current user email
+     * @return --> Response message
+     **/
     @Override
     public String emailCheck(String email) {
         if (!email.contains("@")) {
@@ -323,11 +413,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
-
-
-
-
-
-
-}
 

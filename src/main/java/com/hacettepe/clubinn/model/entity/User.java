@@ -1,13 +1,11 @@
 package com.hacettepe.clubinn.model.entity;
 
-import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
-
 
 @Entity
 @Table(name = "users")
@@ -16,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-    public User(Long id){
+    public User(Long id) {
         this.id = id;
     }
 
@@ -36,16 +34,16 @@ public class User {
     @Column(name = "surname", length = 200)
     private String surname;
 
-    @Column(name = "email", length = 100,unique=true)
+    @Column(name = "email", length = 100, unique = true)
     private String email;
 
     @ManyToOne
     @JoinTable(name = "USER_ROLES", joinColumns = {
-            @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID") })
+            @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "ROLE_ID")})
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Profile profile;
 
 
@@ -57,7 +55,7 @@ public class User {
     private Collection<SubClub> subclubs;
 
 
-    @OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Message> Message;
 
     @OneToMany(cascade = CascadeType.ALL)

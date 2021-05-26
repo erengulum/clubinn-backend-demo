@@ -10,13 +10,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @Service
-public class SubClubServiceImpl implements SubClubService{
+public class SubClubServiceImpl implements SubClubService {
 
     private final ModelMapper modelMapper;
     private final SubClubRepository subClubRepository;
@@ -39,6 +40,12 @@ public class SubClubServiceImpl implements SubClubService{
         this.feedbackRepository = feedbackRepository;
     }
 
+    /**
+     * Displays the sub club screen.
+     *
+     * @param id --> Sub Club ID
+     * @return --> Sub club dto for frontend
+     **/
     @Override
     public SubClubDto getOne(Long id) {
 
@@ -51,6 +58,11 @@ public class SubClubServiceImpl implements SubClubService{
         }
     }
 
+    /**
+     * Displays all sub clubs screen.
+     *
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public List<SubClubDto> getAll() {
 
@@ -63,6 +75,34 @@ public class SubClubServiceImpl implements SubClubService{
         }
     }
 
+    /**
+     * Shows all sub clubs that the user is not a member of.
+     *
+     * @return --> All sub club dto for frontend
+     **/
+    @Override
+    public List<SubClubDto> getAllSubClubNotAMember() {
+        List<SubClub> subClubList = subClubRepository.findAll();
+        List<SubClub> notMemberSubClubList = new ArrayList<>();
+        User user = getAuthenticatedUser();
+        for (SubClub subClub : subClubList) {
+            if (!subClub.getMembers().contains(user)) {
+                notMemberSubClubList.add(subClub);
+            }
+        }
+        if (notMemberSubClubList == null) {
+            return null;
+        } else {
+            return Arrays.asList(modelMapper.map(notMemberSubClubList, SubClubDto[].class));
+        }
+    }
+
+    /**
+     * Displays all sub clubs by category.
+     *
+     * @param categoryId --> Sub club ID
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public List<SubClubDto> getAllByCategory(Long categoryId) {
 
@@ -74,6 +114,12 @@ public class SubClubServiceImpl implements SubClubService{
         }
     }
 
+    /**
+     * Provides sub club deletion from database.
+     *
+     * @param id --> Sub club ID
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public Boolean deleteSubClub(Long id) {
 
@@ -87,6 +133,12 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
+    /**
+     * Adds a new sub club to the database.
+     *
+     * @param subClubDto --> Sub club dto from frontend
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public Boolean createNewSubClub(SubClubDto subClubDto) {
         try {
@@ -115,30 +167,39 @@ public class SubClubServiceImpl implements SubClubService{
         }
     }
 
+    /**
+     * It allows the user to login to the sub club.
+     *
+     * @param joinDto --> Sub club dto from frontend
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean join(JoinDto joinDto) {
         SubClub subClub = subClubRepository.getOne(joinDto.getSubclubId());
         User user = userRepository.findByUsername(joinDto.getUsername());
 
-        for(User member:subClub.getMembers()){
-            if(member==user)
+        for (User member : subClub.getMembers()) {
+            if (member == user)
                 return Boolean.FALSE;
         }
 
-
-
-        if(user==null || subClub==null)
+        if (user == null || subClub == null)
             return Boolean.FALSE;
 
         subClub.getMembers().add(user);
         subClubRepository.save(subClub);
         user.getSubclubs().add(subClub);
         userRepository.save(user);
-        //hata alırsak: user.get
         log.warn("join basariyla gerceklestirildi");
         return Boolean.TRUE;
     }
 
+    /**
+     * It shows the sub club list according to the form id that comes as a parameter.
+     *
+     * @param formId --> Form ID
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public List<SubClubDto> getAllByFormId(Long formId) {
 
@@ -150,6 +211,12 @@ public class SubClubServiceImpl implements SubClubService{
         }
     }
 
+    /**
+     * Updates sub club content.
+     *
+     * @param subClubDto --> Sub Club to be updated
+     * @return --> Boolean Message
+     **/
     @Override
     public Boolean updateSubClub(SubClubDto subClubDto) {
         SubClub subclub = subClubRepository.findBySubClubName(subClubDto.getSubClubName());
@@ -158,6 +225,12 @@ public class SubClubServiceImpl implements SubClubService{
         return true;
     }
 
+    /**
+     * Shows the members in the sub club.
+     *
+     * @param username --> Current username
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public List<SubClubDto> getAllSubClubMemberships(String username) {
         Collection<SubClub> subClubs = userRepository.findByUsername(username).getSubclubs();
@@ -166,24 +239,36 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
-
+    /**
+     * Shows the members in the sub club by sub club ID.
+     *
+     * @param subclubId --> Sub club ID
+     * @return --> All sub club dto for frontend
+     **/
     @Override
     public List<UserDto> getAllSubclubMembers(Long subclubId) {
 
-        Collection<User> members =  subClubRepository.getOne(subclubId).getMembers();
+        Collection<User> members = subClubRepository.getOne(subclubId).getMembers();
         log.warn("members collection basari ile alindi");
         return Arrays.asList(modelMapper.map(members, UserDto[].class));
 
     }
 
+    /**
+     * It is used to assign the sub club admin.
+     *
+     * @param subclubId --> Sub club ID
+     * @param userId    --> User ID
+     * @return --> Boolean response
+     **/
     @Override
     public Boolean assignAdmin(Long subclubId, Long userId) {
         User user = userRepository.getOne(userId);
-        if(user==null)
+        if (user == null)
             return Boolean.FALSE;
 
         SubClub subclub = subClubRepository.getOne(subclubId);
-        if (subclub==null)
+        if (subclub == null)
             return Boolean.FALSE;
 
         subclub.setAdmin(user);
@@ -191,13 +276,19 @@ public class SubClubServiceImpl implements SubClubService{
         return Boolean.TRUE;
     }
 
+    /**
+     * It is used to get the sub club admin.
+     *
+     * @param subclubId --> Sub club ID
+     * @return --> User dto for admin
+     **/
     @Override
     public UserDto getSubclubAdmin(Long subclubId) {
         SubClub subclub = subClubRepository.getOne(subclubId);
-        if (subclub==null)
+        if (subclub == null)
             return null;
 
-        if( subclub.getAdmin()==null)
+        if (subclub.getAdmin() == null)
             return null;
 
         User user = subclub.getAdmin();
@@ -205,12 +296,18 @@ public class SubClubServiceImpl implements SubClubService{
         return modelMapper.map(user, UserDto.class);
     }
 
-
+    /**
+     * It is used to create an announcement for the sub club.
+     *
+     * @param announcementDto --> Announcement dto from frontend.
+     * @param subclubId       --> Sub club ID
+     * @return --> Boolean response
+     **/
     @Override
-    public Boolean createNewAnnouncement(AnnouncementDto announcementDto,Long subclubId) {
+    public Boolean createNewAnnouncement(AnnouncementDto announcementDto, Long subclubId) {
 
         SubClub subclub = subClubRepository.getOne(subclubId);
-        if(subclub==null)
+        if (subclub == null)
             return false;
 
         Announcement ann = new Announcement();
@@ -223,7 +320,12 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
-
+    /**
+     * It is used to delete an announcement.
+     *
+     * @param annoncementId --> Announcement ID
+     * @return --> Boolean response
+     **/
     @Override
     public Boolean deleteSubClubAnnouncement(Long annoncementId) {
 
@@ -237,20 +339,34 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
+    /**
+     * It is used to get all announcements in the sub club.
+     *
+     * @param subclubId --> Sub club ID
+     * @return --> List of announcements for frontend
+     **/
     @Override
     public List<AnnouncementDto> getAllAnnouncements(Long subclubId) {
 
-        Collection<Announcement> annons =  announcementRepository.findAllBySubClub_Id(subclubId);
+        Collection<Announcement> annons = announcementRepository.findAllBySubClub_Id(subclubId);
         log.warn("announcement collection basari ile alindi");
         return Arrays.asList(modelMapper.map(annons, AnnouncementDto[].class));
     }
 
     // FEEDBACK CRUD
 
+    /**
+     * Provides feedback for the sub club.
+     *
+     * @param feedbackDto --> Feedback dto from frontend
+     * @param subClubId   --> Sub club ID
+     * @param username    --> Current username
+     * @return --> Feedback dto for frontend
+     **/
     @Override
     public FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId, String username) {
 
-        if(!subClubRepository.existsById(subClubId)){
+        if (!subClubRepository.existsById(subClubId)) {
             log.warn("Error while creating feedback");
             return null;
         }
@@ -258,7 +374,7 @@ public class SubClubServiceImpl implements SubClubService{
         SubClub subClub = subClubRepository.getOne(subClubId);
 
         User user = userRepository.findByUsername(username);
-        if(user==null){
+        if (user == null) {
             return null;
         }
 
@@ -270,24 +386,36 @@ public class SubClubServiceImpl implements SubClubService{
         subClub.getFeedbacks().add(feedback);
         subClubRepository.save(subClub);
 
-
-        return modelMapper.map(feedback,FeedbackDto.class);
+        return modelMapper.map(feedback, FeedbackDto.class);
     }
 
+    /**
+     * Get all feedbacks for the sub club.
+     *
+     * @param subClubId --> Sub club ID
+     * @return --> List of feedback dto for frontend
+     **/
     @Override
     public List<FeedbackDto> getAllFeedbacks(Long subClubId) {
 
         List<Feedback> feedbackList = feedbackRepository.getAllByOwnerSubClub_Id(subClubId);
-        if(feedbackList==null)
+        if (feedbackList == null)
             return null;
-        return Arrays.asList(modelMapper.map(feedbackList,FeedbackDto[].class));
+        return Arrays.asList(modelMapper.map(feedbackList, FeedbackDto[].class));
 
     }
 
+    /**
+     * Updates the specified feedback for the sub club.
+     *
+     * @param feedbackDto --> Feedback dto from frontend
+     * @param feedbackId  --> Feedback ID
+     * @return --> Boolean Response
+     **/
     @Override
-    public Boolean updateFeedback(FeedbackDto feedbackDto,Long feedbackId) {
+    public Boolean updateFeedback(FeedbackDto feedbackDto, Long feedbackId) {
 
-        if(!feedbackRepository.existsById(feedbackId))
+        if (!feedbackRepository.existsById(feedbackId))
             return Boolean.FALSE;
 
         Feedback feedback = feedbackRepository.getOne(feedbackId);
@@ -297,10 +425,16 @@ public class SubClubServiceImpl implements SubClubService{
         return Boolean.TRUE;
     }
 
+    /**
+     * Deletes the specified feedback for the sub club.
+     *
+     * @param feedbackId --> Feedback ID
+     * @return --> Boolean Response
+     **/
     @Override
     public Boolean deleteFeedback(Long feedbackId) {
 
-        if(!feedbackRepository.existsById(feedbackId))
+        if (!feedbackRepository.existsById(feedbackId))
             return Boolean.FALSE;
 
         Feedback feedback = feedbackRepository.getOne(feedbackId);
@@ -309,6 +443,11 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
+    /**
+     * This function retrieves the current authenticated user information.
+     *
+     * @return --> Current authenticated user
+     **/
     private User getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;

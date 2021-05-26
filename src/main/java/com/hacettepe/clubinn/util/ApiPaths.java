@@ -18,5 +18,4 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH + "/clubadmin";
     }
 
-
 }

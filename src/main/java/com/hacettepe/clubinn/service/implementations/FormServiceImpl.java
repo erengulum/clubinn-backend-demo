@@ -38,6 +38,12 @@ public class FormServiceImpl implements FormService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Allows creating questionnaire for newly created subclub.
+     *
+     * @param formDto --> Form dto from frontend.
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean createForm(FormDto formDto) {
 
@@ -76,6 +82,13 @@ public class FormServiceImpl implements FormService {
         }
     }
 
+    /**
+     * It creates a list of questions for the form to be created.
+     *
+     * @param questionList --> Questions to created
+     * @param form         --> The form object to which questions will be assigned
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean createQuestions(Collection<QuestionDto> questionList, Form form) {
 
@@ -99,6 +112,12 @@ public class FormServiceImpl implements FormService {
         return Boolean.TRUE;
     }
 
+    /**
+     * It returns forms using the sub club id list that come as parameters.
+     *
+     * @param subClubIdList --> List of sub club id
+     * @return --> List of forms
+     **/
     @Override
     public List<FormDto> getAllBySubClub(Long[] subClubIdList) {
 
@@ -118,6 +137,12 @@ public class FormServiceImpl implements FormService {
 
     }
 
+    /**
+     * It returns sub clubs using the form list that come as parameters.
+     *
+     * @param formDtoList --> List of sub club id
+     * @return --> List of sub clubs
+     **/
     @Override
     public List<SubClubDto> questionnaire(List<FormDto> formDtoList) {
 
@@ -136,6 +161,13 @@ public class FormServiceImpl implements FormService {
         return subClubDtoList;
     }
 
+    /**
+     * It checks whether the user can enter the club by measuring their interest in the club.
+     * If user's interest is greater than 50%, user can join the club.
+     *
+     * @param answer --> Answer come from frontend
+     * @return --> Percentage of their interest
+     **/
     @Override
     public int percentageCalculator(int answer) {
         switch (answer) {
@@ -157,6 +189,12 @@ public class FormServiceImpl implements FormService {
         }
     }
 
+    /**
+     * After the questionnaire process is over, it sets the clubs that the user wants.
+     *
+     * @param subClubIdList --> List of sub club id
+     * @return --> Boolean message
+     **/
     @Override
     public Boolean formCompleted(Long[] subClubIdList) {
         User user = getAuthenticatedUser();
@@ -178,7 +216,11 @@ public class FormServiceImpl implements FormService {
 
     }
 
-
+    /**
+     * This function retrieves the current authenticated user information.
+     *
+     * @return --> Current authenticated user
+     **/
     private User getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;

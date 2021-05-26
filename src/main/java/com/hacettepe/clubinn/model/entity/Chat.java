@@ -29,17 +29,14 @@ public class Chat {
     private String creationDate;
 
     @EqualsAndHashCode.Exclude
-    @OneToOne( fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subclub_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SubClub subClub;
 
-    @OneToMany(mappedBy = "chat" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Collection<Message> messageList;
-
-
-
 
     @ManyToMany
     @JoinTable(
