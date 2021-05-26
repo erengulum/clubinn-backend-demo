@@ -45,6 +45,12 @@ public class ChatServiceImpl implements ChatService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Chat creation while creating new Sub Club
+     *
+     * @param subClub --> Sub Club that chat will create
+     * @return --> Returns Sub Club Chat
+     **/
     @Override
     public Chat createChat(SubClub subClub) {
 
@@ -60,6 +66,11 @@ public class ChatServiceImpl implements ChatService {
         return chat;
     }
 
+    /**
+     * Deletes the subclub chat in the admin panel
+     *
+     * @param subClub --> Sub Club that chat will delete
+     **/
     @Override
     public void deleteChat(SubClub subClub) {
         Chat chat = chatRepository.getOne(subClub.getChat().getId());
@@ -73,6 +84,12 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
+    /**
+     * Gets the user into the chat.
+     *
+     * @param id --> User id
+     * @return --> Whether s/he could attend the chat
+     **/
     @Override
     public Boolean join(Long id) {
         Chat chat = chatRepository.getOne(id);
@@ -98,6 +115,12 @@ public class ChatServiceImpl implements ChatService {
 
     }
 
+    /**
+     * User disconnect from chat.
+     *
+     * @param id --> User id
+     * @return --> Whether s/he could Leave the chat
+     **/
     @Override
     public String disconnect(Long id) {
         Chat chat = chatRepository.getOne(id);
@@ -110,6 +133,13 @@ public class ChatServiceImpl implements ChatService {
         return "Successfully Disconnected";
     }
 
+    /**
+     * User send message to chat.
+     *
+     * @param id         --> Chat id
+     * @param messageDto --> MessageDto from user
+     * @return --> MessageDto to Chat
+     **/
     @Override
     public MessageDto sendMessage(Long id, MessageDto messageDto) {
 
@@ -129,6 +159,14 @@ public class ChatServiceImpl implements ChatService {
         return modelMapper.map(newMessage, MessageDto.class);
     }
 
+    /**
+     * User send message to chat by sub club id.
+     *
+     * @param subclubId      --> User id
+     * @param messageDto     --> MessageDto from user
+     * @param senderUsername --> Sender User
+     * @return --> MessageDto to Chat
+     **/
     @Override
     public MessageHistoryDto sendMessageBySubclubId(Long subclubId, String senderUsername, MessageDto messageDto) {
 
@@ -160,6 +198,12 @@ public class ChatServiceImpl implements ChatService {
         return modelMapper.map(newMessage, MessageHistoryDto.class);
     }
 
+    /**
+     * Slang word detection mechanism for chat.
+     *
+     * @param message --> User message
+     * @return --> MessageDto to Chat
+     **/
     @Override
     public String slangWordDetector(String message) {
 
@@ -185,7 +229,12 @@ public class ChatServiceImpl implements ChatService {
 
     }
 
-
+    /**
+     * Get all chat messages.
+     *
+     * @param chatId --> Chat ID
+     * @return --> MessageDto to Chat
+     **/
     @Override
     public List<MessageHistoryDto> getChatMessages(Long chatId) {
 
@@ -195,6 +244,12 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
+    /**
+     * Get all chat messages by sub club id.
+     *
+     * @param subclubId --> Sub club ID
+     * @return --> Message History of Chat
+     **/
     @Override
     public List<MessageHistoryDto> getChatMessagesBySubclubId(Long subclubId) {
         log.warn("mesaj servisine girdi");
@@ -227,6 +282,11 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
+    /**
+     * This function retrieves the current authenticated user information.
+     *
+     * @return --> Current authenticated user
+     **/
     private User getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;

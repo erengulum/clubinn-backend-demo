@@ -1,4 +1,5 @@
 package com.hacettepe.clubinn.model.entity;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-
 
 @Entity
 @Table(name = "feedbacks")
@@ -27,8 +27,8 @@ public class Feedback {
 
     @ManyToOne
     @JoinTable(name = "feedbacks_subclub", joinColumns = {
-            @JoinColumn(name = "feedback_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "subclub_id") })
+            @JoinColumn(name = "feedback_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "subclub_id")})
     private SubClub ownerSubClub;
 
     @ManyToOne
@@ -41,4 +41,5 @@ public class Feedback {
 
     @Column(name = "comment", length = 255)
     private String comment;
+
 }

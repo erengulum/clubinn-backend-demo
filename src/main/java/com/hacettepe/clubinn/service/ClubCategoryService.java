@@ -2,8 +2,6 @@ package com.hacettepe.clubinn.service;
 
 import com.hacettepe.clubinn.model.dto.ClubCategoryDto;
 import com.hacettepe.clubinn.model.dto.ClubCategoryRequestDto;
-import com.hacettepe.clubinn.model.dto.SubClubDto;
-import com.hacettepe.clubinn.model.entity.ClubCategoryRequest;
 
 import java.util.List;
 

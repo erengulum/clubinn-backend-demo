@@ -1,6 +1,5 @@
 package com.hacettepe.clubinn.model.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role_name", length = 100,unique=true)
+    @Column(name = "role_name", length = 100, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
