@@ -26,9 +26,9 @@ public class ClubCategory {
     @Column(name = "clubname", length = 100, unique = true)
     private String clubCategoryName;
 
+    //One to many subclub tutacak
     @Column(name = "description", length = 200)
     private String description;
-    //One to many subclub tutacak
 
     @OneToMany(mappedBy = "clubCategory", cascade = CascadeType.ALL)
     private Collection<SubClub> subClubs;

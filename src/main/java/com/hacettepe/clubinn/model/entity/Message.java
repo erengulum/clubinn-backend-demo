@@ -28,7 +28,7 @@ public class Message {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "chat_id",nullable = true)
+    @JoinColumn(name = "chat_id", nullable = true)
     private Chat chat;
 
     @ManyToOne

@@ -3,8 +3,6 @@ package com.hacettepe.clubinn.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -24,14 +22,13 @@ public class Announcement {
     @Column(name = "headline", length = 100)
     private String headline;
 
-
     @Column(name = "content", length = 500)
     private String content;
 
     @ManyToOne
     @JoinTable(name = "ANNOUNCEMENT_SUBCLUB", joinColumns = {
-            @JoinColumn(name = "ANNOUNCEMENT_ID") }, inverseJoinColumns = {
-            @JoinColumn(name = "SUBCLUD_ID") })
+            @JoinColumn(name = "ANNOUNCEMENT_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "SUBCLUD_ID")})
     private SubClub subClub;
 
 }

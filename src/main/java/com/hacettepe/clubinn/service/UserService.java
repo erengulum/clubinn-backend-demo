@@ -33,5 +33,4 @@ public interface UserService {
 
     String emailCheck(String email);
 
-
 }

@@ -40,8 +40,8 @@ public class SubClub {
 
     @ManyToOne
     @JoinTable(name = "SUBCLUB_CATEGORY", joinColumns = {
-            @JoinColumn(name = "SUBCLUD_ID") }, inverseJoinColumns = {
-            @JoinColumn(name = "CLUBCATEGORY_ID") })
+            @JoinColumn(name = "SUBCLUD_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "CLUBCATEGORY_ID")})
     private ClubCategory clubCategory;
 
     @EqualsAndHashCode.Exclude
@@ -66,7 +66,7 @@ public class SubClub {
     private User admin;
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "form_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Form form;

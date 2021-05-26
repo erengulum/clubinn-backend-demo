@@ -1,9 +1,7 @@
 package com.hacettepe.clubinn.service;
 
-import com.hacettepe.clubinn.model.dto.ChatDto;
 import com.hacettepe.clubinn.model.dto.MessageDto;
 import com.hacettepe.clubinn.model.dto.MessageHistoryDto;
-import com.hacettepe.clubinn.model.dto.UserDto;
 import com.hacettepe.clubinn.model.entity.Chat;
 import com.hacettepe.clubinn.model.entity.SubClub;
 
@@ -21,7 +19,7 @@ public interface ChatService {
 
     MessageDto sendMessage(Long id, MessageDto messageDto);
 
-    MessageHistoryDto sendMessageBySubclubId(Long subgroupId,String senderUsername,MessageDto messageDto);
+    MessageHistoryDto sendMessageBySubclubId(Long subgroupId, String senderUsername, MessageDto messageDto);
 
     String slangWordDetector(String message);
 

@@ -2,7 +2,6 @@ package com.hacettepe.clubinn.service;
 
 import com.hacettepe.clubinn.model.dto.*;
 
-
 import java.util.List;
 
 public interface SubClubService {
@@ -39,11 +38,11 @@ public interface SubClubService {
 
     List<SubClubDto> getAllByFormId(Long formId);
 
-    FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId,String username);
+    FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId, String username);
 
     List<FeedbackDto> getAllFeedbacks(Long subClubId);
 
-    Boolean updateFeedback(FeedbackDto feedbackDto,Long feedbackId);
+    Boolean updateFeedback(FeedbackDto feedbackDto, Long feedbackId);
 
     Boolean deleteFeedback(Long feedbackId);
 
