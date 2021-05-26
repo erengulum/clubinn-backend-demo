@@ -47,7 +47,6 @@ public class SubClubController {
             return ResponseEntity.badRequest().body(responseMessage);
         }
 
-
     }
 
     @RequestMapping(value = "getall/{username}", method = RequestMethod.GET)

@@ -74,4 +74,9 @@ public class SubClub {
     @OneToMany(mappedBy = "ownerSubClub", cascade = CascadeType.ALL)
     private Collection<Feedback> feedbacks;
 
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "questionnaire")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Questionnaire questionnaire;
+
 }

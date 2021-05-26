@@ -3,6 +3,8 @@ package com.hacettepe.clubinn.service;
 import com.hacettepe.clubinn.model.dto.*;
 import com.hacettepe.clubinn.model.entity.User;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService {
@@ -31,6 +33,7 @@ public interface UserService {
 
     String updateProfileWithEmail(UpdateProfileDto updateProfileDto, String username);
 
+    void sendEmail(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException;
     String emailCheck(String email);
 
 }
