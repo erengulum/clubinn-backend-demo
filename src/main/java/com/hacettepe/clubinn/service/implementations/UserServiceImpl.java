@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             }
             return "Yeni girilen şifreler birbirleri ile uyuşmuyor !";
         }
-        return "Şifre kullanıcın önceki şifresi ile uyuşmuyor";
+        return "Girilen şifre kullanıcının önceki şifresi ile uyuşmuyor";
     }
 
     private String passwordCheck(String password) {
