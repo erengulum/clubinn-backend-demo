@@ -75,7 +75,9 @@ public class UserController {
     @RequestMapping(value = "/profile/changepassword/{username}", method = RequestMethod.PUT)
     @ApiOperation(value = "Change Password Operation", response = ResponseMessage.class)
     public ResponseEntity<ResponseMessage> changePassword(@RequestBody PasswordChangeDto passwordChangeDto, @PathVariable String username) {
+        log.warn("Update password");
         responseMessage.setResponseMessage(userService.changePassword(passwordChangeDto, username));
+
         return ResponseEntity.ok(responseMessage);
     }
 
