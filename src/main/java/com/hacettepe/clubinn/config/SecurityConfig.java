@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         log.warn("configure metodu calisti");
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/api/token/register", "/api/token","/api/clubcategories/**","/api/subclubs/**").permitAll() //bu url herkese acıktır, register ve login urlleri
+                .antMatchers("/api/token/register", "/api/token","/api/clubcategories/**","/api/subclubs/**","/swagger-ui/","/swagger-ui/**","/swagger-resources/**","/v2/**").permitAll() //bu url herkese acıktır, register ve login urlleri
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
