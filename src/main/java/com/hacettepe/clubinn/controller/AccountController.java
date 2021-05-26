@@ -94,6 +94,7 @@ public class AccountController {
 
         responseMessage.setResponseType(1);
         responseMessage.setResponseMessage("Basariyla kaydoldunuz!");
+
         return ResponseEntity.ok(responseMessage);
 
     }

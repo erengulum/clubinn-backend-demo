@@ -8,6 +8,7 @@ import com.hacettepe.clubinn.model.repository.ProfileRepository;
 import com.hacettepe.clubinn.model.repository.RoleRepository;
 import com.hacettepe.clubinn.model.repository.UserRepository;
 import com.hacettepe.clubinn.service.UserService;
+import com.hacettepe.clubinn.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+
+import java.io.UnsupportedEncodingException;
+import javax.mail.MessagingException;
 
 
 @Slf4j
@@ -38,6 +48,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -149,12 +163,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 user.setRole(role);
                 userRepository.save(user);
                 this.createProfile(user);
+
+                String loginPath = ApiPaths.LOCAL_CLIENT_BASE_PATH +  "/login";
+                sendEmail(registrationRequest.getEmail(),loginPath);
+
                 return Boolean.TRUE;
 
 
 
         } catch (Exception e) {
-            log.error("Registration has been failed. Exception=", e);
+            log.error("Registration has been failed.Please use your own e-mail address and try again. Exception=", e);
             return Boolean.FALSE;
         }
     }
@@ -276,5 +294,40 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return "true";
     }
+
+
+
+    @Override
+    public void sendEmail(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("clubinnnteam@gmail.com", "ClubInn Team");
+        helper.setTo(recipientEmail);
+
+        String subject = "Welcome to the ClubIn!!";
+
+        String content = "<p>Hello,</p>"
+                + "<p>Welcome to the ClubInn!</p>"
+                + "<p>You just registered to the our system!</p>"
+                + "<p>You can use the following link to login and enjoy!:</p>"
+                + "<p><a href=\"" + link + "\">Login</a></p>"
+                + "                     <p><b>ClubInn Team<b></p>"
+                + "<br>";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+
+
+
+
+
+
+
 }
 
