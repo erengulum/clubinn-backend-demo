@@ -2,16 +2,15 @@ package com.hacettepe.clubinn.service.implementations;
 
 import com.hacettepe.clubinn.model.dto.*;
 import com.hacettepe.clubinn.model.entity.*;
-import com.hacettepe.clubinn.model.repository.AnnouncementRepository;
-import com.hacettepe.clubinn.model.repository.ClubCategoryRepository;
-import com.hacettepe.clubinn.model.repository.SubClubRepository;
-import com.hacettepe.clubinn.model.repository.UserRepository;
+import com.hacettepe.clubinn.model.repository.*;
 import com.hacettepe.clubinn.service.SubClubService;
-import com.hacettepe.clubinn.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,17 +25,19 @@ public class SubClubServiceImpl implements SubClubService{
     private final ChatServiceImpl chatService;
     private final UserRepository userRepository;
     private final AnnouncementRepository announcementRepository;
+    private final FeedbackRepository feedbackRepository;
 
     public SubClubServiceImpl(ModelMapper modelMapper, SubClubRepository subClubRepository,
                               ClubCategoryRepository clubCategoryRepository,
-                              ChatServiceImpl chatService,UserRepository userRepository,
-                              AnnouncementRepository announcementRepository) {
+                              ChatServiceImpl chatService, UserRepository userRepository,
+                              AnnouncementRepository announcementRepository, FeedbackRepository feedbackRepository) {
         this.modelMapper = modelMapper;
         this.subClubRepository = subClubRepository;
         this.clubCategoryRepository = clubCategoryRepository;
         this.chatService = chatService;
         this.userRepository = userRepository;
         this.announcementRepository = announcementRepository;
+        this.feedbackRepository = feedbackRepository;
     }
 
     @Override
@@ -64,6 +65,23 @@ public class SubClubServiceImpl implements SubClubService{
     }
 
     @Override
+    public List<SubClubDto> getAllSubClubNotAMember() {
+        List<SubClub> subClubList = subClubRepository.findAll();
+        List<SubClub> notMemberSubClubList = new ArrayList<>();
+        User user = getAuthenticatedUser();
+        for(SubClub subClub : subClubList){
+            if(!subClub.getMembers().contains(user)){
+                notMemberSubClubList.add(subClub);
+            }
+        }
+        if (notMemberSubClubList == null) {
+            return null;
+        } else {
+            return Arrays.asList(modelMapper.map(notMemberSubClubList, SubClubDto[].class));
+        }
+    }
+
+    @Override
     public List<SubClubDto> getAllByCategory(Long categoryId) {
 
         List<SubClub> subClubList = subClubRepository.getAllByClubCategory_Id(categoryId);
@@ -78,7 +96,6 @@ public class SubClubServiceImpl implements SubClubService{
     public Boolean deleteSubClub(Long id) {
 
         SubClub subclub = subClubRepository.getOne(id);
-        chatService.deleteChat(subclub);
 
         if (subclub != null) {
             subClubRepository.delete(subclub);
@@ -224,7 +241,6 @@ public class SubClubServiceImpl implements SubClubService{
 
     }
 
-
     @Override
     public Boolean deleteSubClubAnnouncement(Long annoncementId) {
 
@@ -242,9 +258,83 @@ public class SubClubServiceImpl implements SubClubService{
     public List<AnnouncementDto> getAllAnnouncements(Long subclubId) {
 
         Collection<Announcement> annons =  announcementRepository.findAllBySubClub_Id(subclubId);
-        log.warn("members collection basari ile alindi");
+        log.warn("announcement collection basari ile alindi");
         return Arrays.asList(modelMapper.map(annons, AnnouncementDto[].class));
     }
 
+    // FEEDBACK CRUD
 
+    @Override
+    public FeedbackDto createNewFeedback(FeedbackDto feedbackDto, Long subClubId, String username) {
+
+        if(!subClubRepository.existsById(subClubId)){
+            log.warn("Error while creating feedback");
+            return null;
+        }
+
+        SubClub subClub = subClubRepository.getOne(subClubId);
+
+        User user = userRepository.findByUsername(username);
+        if(user==null){
+            return null;
+        }
+
+        Feedback feedback = modelMapper.map(feedbackDto, Feedback.class);
+        feedback.setOwnerSubClub(subClub);
+        feedback.setOwner(user);
+        feedbackRepository.save(feedback);
+
+        subClub.getFeedbacks().add(feedback);
+        subClubRepository.save(subClub);
+
+
+        return modelMapper.map(feedback,FeedbackDto.class);
+    }
+
+    @Override
+    public List<FeedbackDto> getAllFeedbacks(Long subClubId) {
+
+        List<Feedback> feedbackList = feedbackRepository.getAllByOwnerSubClub_Id(subClubId);
+        if(feedbackList==null)
+            return null;
+        return Arrays.asList(modelMapper.map(feedbackList,FeedbackDto[].class));
+
+    }
+
+    @Override
+    public Boolean updateFeedback(FeedbackDto feedbackDto,Long feedbackId) {
+
+        if(!feedbackRepository.existsById(feedbackId))
+            return Boolean.FALSE;
+
+        Feedback feedback = feedbackRepository.getOne(feedbackId);
+        feedback.setComment(feedbackDto.getComment());
+        feedbackRepository.save(feedback);
+
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean deleteFeedback(Long feedbackId) {
+
+        if(!feedbackRepository.existsById(feedbackId))
+            return Boolean.FALSE;
+
+        Feedback feedback = feedbackRepository.getOne(feedbackId);
+        feedbackRepository.delete(feedback);
+        return Boolean.TRUE;
+
+    }
+
+    private User getAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return userRepository.findByUsername(username);
+    }
 }

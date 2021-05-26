@@ -1,5 +1,4 @@
 package com.hacettepe.clubinn.service.implementations;
-// disconnect stringten çek
 
 import com.hacettepe.clubinn.model.dto.ChatDto;
 import com.hacettepe.clubinn.model.dto.MessageDto;
@@ -131,10 +130,15 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public MessageDto sendMessageBySubclubId(Long subclubId, MessageDto messageDto) {
+    public MessageHistoryDto sendMessageBySubclubId(Long subclubId, String senderUsername, MessageDto messageDto) {
 
-        if(chatRepository.getBySubClubId(subclubId)==null){
+        if (chatRepository.getBySubClubId(subclubId) == null) {
             log.warn("bu subgrup icin chat henüz olusturulmadi");
+            return null;
+        }
+        User sender = userRepository.findByUsername(senderUsername);
+
+        if (sender == null) {
             return null;
         }
         Long chatId = chatRepository.getBySubClubId(subclubId).getId();
@@ -147,12 +151,13 @@ public class ChatServiceImpl implements ChatService {
         newMessage.setContent(slangWordDetector(messageDto.getContent()));
         newMessage.setDate(date);
         newMessage.setChat(chat);
-        newMessage.setUser(getAuthenticatedUser());
+
+        newMessage.setUser(sender);
         messageRepository.save(newMessage);
 
         chat.getMessageList().add(newMessage);
         chatRepository.save(chat);
-        return modelMapper.map(newMessage, MessageDto.class);
+        return modelMapper.map(newMessage, MessageHistoryDto.class);
     }
 
     @Override
@@ -181,23 +186,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
-
     @Override
     public List<MessageHistoryDto> getChatMessages(Long chatId) {
-
-        List<Message> messages = messageRepository.getAllByChat_Id(chatId);
-
-         return Arrays.asList(modelMapper.map(messages, MessageHistoryDto[].class));
-    }
-
-
-    @Override
-    public List<MessageHistoryDto> getChatMessagesBySubclubId(Long subclubId) {
-
-        if(chatRepository.getBySubClubId(subclubId)==null){
-            return null;
-        }
-        Long chatId = chatRepository.getBySubClubId(subclubId).getId();
 
         List<Message> messages = messageRepository.getAllByChat_Id(chatId);
 
@@ -205,6 +195,36 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
+    @Override
+    public List<MessageHistoryDto> getChatMessagesBySubclubId(Long subclubId) {
+        log.warn("mesaj servisine girdi");
+        if (chatRepository.getBySubClubId(subclubId) == null) {
+            return null;
+        }
+        Long chatId = chatRepository.getBySubClubId(subclubId).getId();
+
+        List<Message> messages = messageRepository.getAllByChat_Id(chatId);
+
+        ArrayList<MessageHistoryDto> messageHistoryDtos = new ArrayList<MessageHistoryDto>(messages.size());
+
+        for (Message message : messages) {
+            MessageHistoryDto messageHistoryDto = new MessageHistoryDto();
+            messageHistoryDto.setContent(message.getContent());
+            messageHistoryDto.setDate(message.getDate());
+            messageHistoryDto.setUser(modelMapper.map(message.getUser(), UserDto.class));
+
+            messageHistoryDtos.add(messageHistoryDto);
+        }
+
+        if (messageHistoryDtos.get(0) != null) {
+            System.out.println("msj:" + messages.get(0).getUser().getUsername());
+
+        } else {
+            System.out.println("msj:hata var");
+        }
+
+        return messageHistoryDtos;
+    }
 
 
     private User getAuthenticatedUser() {
